@@ -1,0 +1,20 @@
+<?php
+
+namespace DummyNamespace;
+
+use Illuminate\Database\Seeder;
+
+
+
+class DummyModel extends Seeder
+{
+    /**
+     * Run the database seeds.
+     *
+     * @return App\User
+     */
+    public function run($attributes = [])
+    {
+        // $user = create(User::class);
+    }
+}

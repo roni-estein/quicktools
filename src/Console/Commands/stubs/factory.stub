@@ -1,0 +1,16 @@
+<?php
+
+use Faker\Generator as Faker;
+
+use DummyNamespace;
+
+$factory->define(DummyModel::class, function (Faker $faker) {
+    return [
+        'name' => 'fake DummyModel: ' . $faker->word,
+        'slug' => function (array $model) {return str_slug($model['name']);},
+
+        // Foreign Key
+        // 'model_id' => function ($faker) {return create(Model::class)->id;},
+
+    ];
+});

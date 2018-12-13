@@ -1,0 +1,15 @@
+<?php
+
+namespace DummyNamespace;
+
+use Quicktools\Model;
+
+class DummyClass extends Model
+{
+    protected $guarded = [];
+
+    protected $table = 'dummy_table';
+
+    ///////////////////////  RELATIONS  ///////////////////////
+
+}

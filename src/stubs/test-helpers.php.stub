@@ -1,0 +1,32 @@
+<?php
+
+function create($class, $attributes = [], $times = null)
+{
+    return factory($class, $times)->create($attributes);
+}
+
+function make($class, $attributes = [], $times = null)
+{
+    return factory($class, $times)->make($attributes);
+}
+
+function raw($class, $attributes = [], $times = null)
+{
+    return factory($class, $times)->raw($attributes);
+}
+
+function stateCreate($class, $states, $attributes = [], $times = null){
+    return factory($class, $times)->states($states)->create($attributes);
+}
+
+function stateMake($class, $states, $attributes = [], $times = null){
+    return factory($class, $times)->states($states)->make($attributes);
+}
+
+function stateRaw($class, $states, $attributes = [], $times = null){
+    return factory($class, $times)->states($states)->raw($attributes);
+}
+
+function seed($class, $attributes = []){
+    return (new $class)->run($attributes);
+}

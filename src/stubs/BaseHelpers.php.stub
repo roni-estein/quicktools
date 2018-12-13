@@ -1,0 +1,351 @@
+<?php
+
+use Carbon\Carbon;
+
+use Illuminate\Support\Collection;
+use Illuminate\Support\Debug\HtmlDumper;
+use Illuminate\Support\Facades\DB;
+use jc21\CliTable;
+
+function decamelize($string) {
+    return strtolower(preg_replace(['/([a-z\d])([A-Z])/', '/([^_])([A-Z][a-z])/'], '$1_$2', $string));
+}
+
+function getShortClassSlug($object){
+    return decamelize((new \ReflectionClass($object))->getShortName());
+}
+
+function getShortClassName($object){
+    return (new \ReflectionClass($object))->getShortName();
+}
+
+function ddTable(Collection $collection){
+    ddf(printTable($collection));
+}
+
+function ignoreMockFor($class){
+    unset(app()[$class]);
+}
+
+function printTable($collection)
+{
+
+    if ($collection instanceof Illuminate\Database\Eloquent\Collection) {
+        return dbTable($collection);
+    } elseif ($collection instanceof Illuminate\Support\Collection) {
+        return baseTable($collection);
+    }
+    elseif (is_array($collection)){
+        return arrayTable($collection);
+    }
+
+    throw new \Exception('Trying to print a table that is not in a proper format');
+}
+function arrayTable($col){
+    return baseTable(collect($col));
+}
+
+function baseTable(Collection $col){
+    $table = new CliTable();
+    // isolate the column headers of the table
+    collect((Array)$col->first())->keys()->each( function($key) use ($table){
+        $table->addField($key,$key);
+    });
+    $col = $col->map( function($row){
+        return (Array)$row;
+    });
+    $table->injectData($col->all());
+    return $table->display();
+}
+
+function dbTable(Illuminate\Database\Eloquent\Collection $col){
+    $table = new CliTable();
+    // isolate the column headers of the table
+    collect((Array)$col->first()->tableHeaders())->each( function($key) use ($table){
+        $table->addField($key,$key);
+    });
+
+    $table->injectData($col->all());
+    return $table->display();
+    ddf($table->display(), 2, 2);
+
+}
+
+/**
+ * @param $var
+ * @param int $levels defaults to 2
+ *
+ * DDF is just a wrapper for dd to allow you some more information about the calling
+ * functions, formats each line with backtraceLine function
+ */
+function ddf($var, $levels = 1, $start = 1){
+
+    $trace = debug_backtrace();
+    for ($i = $start; $i < $levels + $start ; $i++) {
+        backtraceLine($trace, $i);
+    }
+    dump('-------------------------------------------');
+    dd($var);
+}
+
+/**
+ * @param $trace
+ * @param $line
+ * @return bool
+ *
+ * Backtrace line, applies formatting to a line of the backtrace for ease of reading
+ * during a ddf function call. Instead of using the dd function in testing and not
+ * remembering where you called it.
+ */
+function backtraceLine($trace, $line){
+
+    $str = isset($trace[$line]["class"]) ? $trace[$line]["class"].'\\':'';
+    $str .= $trace[$line]["function"];
+    $str.='(';
+    $args = collect($trace[$line]["args"]);
+
+    $str .= $args->map(function($item){
+        if (is_object($item)) return get_class($item);
+        try{
+            if (is_array($item)) return '['.implode(',', $item).']';
+        }catch (\Exception $e){
+            dd($e->getTrace());
+        }
+        return $item;
+    });
+
+    $str.=')';
+    dump( $str );
+    return substr($trace[$line]["function"], -9) != "{closure}";
+}
+
+/**
+ * @param $variable
+ * @param int $depth
+ * @param int $stringLength
+ *
+ * simpler than dd, sometimes helpful when calling from ajax to appear in console
+ */
+function ddd($variable, $depth = -1, $stringLength = 20)
+{
+    var_dump($variable);
+    die();
+}
+
+
+/**
+ * @param $var
+ * @return string
+ *
+ * Converts empty values into null values
+ */
+function ne($var)
+{
+    if (empty($var) || is_null($var)) {
+        return "null";
+    } else {
+        return $var;
+    }
+}
+
+
+/**
+ * @param \Illuminate\Database\Schema\Blueprint $table
+ * @return int
+ *
+ * This allows you to current timestamp for created_at and updated at
+ * especially useful when not using mysql for testing.
+ */
+function myTimestamps(Illuminate\Database\Schema\Blueprint $table)
+{
+
+    //WHILE RUNNING UNIT TESTS
+    if (app()->runningUnitTests()) {
+
+        $table->timestamps();
+//       ddf($table);
+        return 0;
+    } else {
+
+        $table->timestamp('created_at')->useCurrent();
+
+        //check if using a mysql or sql library
+
+        //FIX THIS LATER ITS STALLING TESTS
+        //TEMP HACK
+
+//        $table->timestamp('updated_at')->useCurrent();
+
+        if (env('DB_CONNECTION') == 'mysql') {
+            $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
+        } elseif (env('DB_CONNECTION') == 'sqlite') {
+            $table->timestamp('updated_at')->useCurrent();
+            DB::RAW('CREATE TRIGGER update_ts_trigger AFTER UPDATE On ' . $table->getTable() . ' BEGIN update ' . $table->getTable() . ' SET updated_at = CURRENT_TIMESTAMP WHERE id = NEW.id; END;');
+        }
+    }
+
+}
+
+function loggedBoolean(Illuminate\Database\Schema\Blueprint $table, $fieldName)
+{
+    $table->boolean($fieldName)->default(false);
+    $table->timestamp($fieldName . '_at')->nullable();
+    $table->integer($fieldName . '_by')->unsigned()->nullable();
+}
+
+function loggedDate(Illuminate\Database\Schema\Blueprint $table, $fieldName)
+{
+    $table->dateTime($fieldName)->nullable();
+    $table->timestamp($fieldName . '_at')->nullable();
+    $table->integer($fieldName . '_by')->unsigned()->nullable();
+}
+
+function setLoggedDate($table, $field, $date, $staff, $record)
+{
+
+    DB::statement('update ' . $table . '
+                        set 
+                        ' . $field . ' = "' . $date . '",
+                        ' . $field . '_by = ' . $staff . ',
+                        ' . $field . '_at = "' . Carbon::now() . '"
+                        where id = ' . $record);
+}
+
+function clearLoggedDate($table, $field, $staff, $record)
+{
+
+    DB::statement('update ' . $table . '
+                        set 
+                        ' . $field . ' = NULL,
+                        ' . $field . '_by = ' . $staff . ',
+                        ' . $field . '_at = "' . Carbon::now() . '"
+                        where id = ' . $record);
+}
+
+function updatePositiveLoggedBoolean($table, $field, $staff, $record)
+{
+
+    DB::statement('update ' . $table . '
+                        set 
+                        ' . $field . ' = 1,
+                        ' . $field . '_by = ' . $staff . ',
+                        ' . $field . '_at = "' . Carbon::now() . '"
+                        where id = ' . $record);
+}
+
+function updateNegativeLoggedBoolean($table, $field, $staff, $record)
+{
+
+    DB::statement('update ' . $table . '
+                        set 
+                        ' . $field . ' = 0,
+                        ' . $field . '_by = ' . $staff . ',
+                        ' . $field . '_at = "' . Carbon::now() . '"
+                        where id = ' . $record);
+}
+
+function convertPng2Jpg($filePath)
+{
+    $image = imagecreatefrompng($filePath . '.png');
+    $bg = imagecreatetruecolor(imagesx($image), imagesy($image));
+    imagefill($bg, 0, 0, imagecolorallocate($bg, 255, 255, 255));
+    imagealphablending($bg, true);
+    imagecopy($bg, $image, 0, 0, 0, 0, imagesx($image), imagesy($image));
+    imagedestroy($image);
+    $quality = 30; // 0 = worst / smaller file, 100 = better / bigger file
+    imagejpeg($bg, $filePath . ".jpg", $quality);
+    imagedestroy($bg);
+}
+
+function flashNotification($notification)
+{
+    session()->flash('notification', $notification);
+}
+
+function fdanger($message)
+{
+    session()->flash('icon', 'fas fa-exclamation-triangle');
+    session()->flash('color', 'bg-red-dark');
+    flashNotification($message);
+}
+
+function finfo($message)
+{
+    session()->flash('icon', 'far fa-info-circle fa-2x');
+    session()->flash('color', 'bg-blue-dark');
+    flashNotification($message);
+}
+
+function fsuccess($message)
+{
+    session()->flash('icon', 'far fa-check-circle fa-2x');
+    session()->flash('color', 'bg-teal');
+    flashNotification($message);
+}
+
+function fwarning($message)
+{
+    session()->flash('icon', 'far fa-question-circle fa-2x');
+    session()->flash('color', 'bg-orange');
+    flashNotification($message);
+}
+
+function onlyDigits($text)
+{
+    return preg_replace('/[^0-9]/', '', $text);
+}
+
+function checkPhoneLength($number)
+{
+    return ((strlen($number) == 11 && $number[0] == "1") || (strlen($number) == 10 && $number[0] != "1"));
+}
+
+function formatPhone($number)
+{
+    $number = onlyDigits($number);
+    if (!checkPhoneLength($number)) {
+        Throw new Exception('invalid phone number: *' . $number . '*', 0);
+    }
+    return '(' . substr($number, -10, 3) . ') '
+        . substr($number, -7, 3) . '-'
+        . substr($number, -4, 4);
+
+}
+
+function UserLogoutwithRoute($request, $route)
+{
+    Auth::guard('web')->logout();
+    $request->session()->invalidate();
+    return redirect($route);
+}
+
+function UserLogoutwithView($request, $view, $data = null)
+{
+    Auth::guard('web')->logout();
+    $request->session()->invalidate();
+    return view($view)->withData($data);
+}
+
+function dumpSessionErrors()
+{
+
+    if (session()->has('errors')) {
+        return dump(session('errors'))->toArray();
+    }
+    return dump('NO ERRORS IN SESSION');
+}
+
+function dieSessionErrors()
+{
+    if (session()->has('errors')) {
+        returnddf(session('errors')->toArray());
+    }
+    ddf('NO ERRORS IN SESSION');
+}
+
+function ddsql($builder, $replace = false){
+    if (! $replace)
+        return ddf([$builder->toSql(), $builder->getBindings()]);
+    $sql = $builder->toSql();
+    ddf(str_replace_array('?', $builder->getBindings(), $sql));
+}

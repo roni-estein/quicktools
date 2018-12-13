@@ -1,0 +1,32 @@
+{
+    "name": "roniestein/quicktools",
+    "description": "A set of functions to bootstrap a laravel project with commands ehanced for production speed.",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Roni Estein",
+            "email": "roni.estein@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "Quicktools\\": "src/"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "0.1-dev"
+        },
+        "laravel": {
+            "providers": [
+                "Quicktools\\QuicktoolsServiceProvider"
+            ],
+            "aliases": {
+                "Quicktools": "Quicktools\\Facade"
+            }
+        }
+    }
+}

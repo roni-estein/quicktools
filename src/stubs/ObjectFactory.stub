@@ -1,0 +1,90 @@
+<?php
+
+namespace Tests\Assistant;
+
+//use App\Products\ProductLine;
+//use App\Staff;
+//use App\Inventory\Stock;
+//use App\Products\Product;
+//use App\Products\Category;
+//use App\Inventory\Section;
+//use App\Products\Subcategory;
+//use App\Products\Compression\Standard\Leg;
+
+/*
+|-------------------------------------------------------------------------------
+| EXAMPLE OBJECT FACTORY
+|-------------------------------------------------------------------------------
+|   Object factories are used when you have to build up something quite large
+|   and inter related often. Here are a couple of examples to look at
+|   
+*/
+class ObjectFactory
+{
+
+//    public static function createValidCategory($attributes = null) : Category
+//    {
+//        $category = $attributes['classes']['category'] ?? create(Category::class, $attributes['category'] ?? []);
+//
+//        $subcategories = $attributes['classes']['subcategories'] ?? collect([create(Subcategory::class,
+//                array_merge(($attributes['subcategories'] ?? []),['category_id' => $category->id])
+//        )]);
+//
+//        if($subcategories instanceof Subcategory){
+//            $subcategories = collect([$subcategories]);
+//        }
+//
+//        $subcategories->filter( function($subcategory){
+//            return ! $subcategory->is_informational;
+//        })->map( function($subcategory) use ($attributes){
+//
+//            $productLines = $attributes['classes']['productLines'] ?? collect([create(ProductLine::class, $attributes['productLines'] ?? [])]);
+//
+//            $subcategory->productLines()->sync($productLines->pluck('id')->toArray());
+////            ddf($subcategory->load('productLines'));
+////            ddf($productLines);
+//            $productLines->map( function($line) use ($attributes) {
+//
+//                if(! isset($attributes['classes']['products'])){
+//
+//                    $legStyleId = $line->details->id;
+////                    dump($legStyleId);
+//                    $leg = create(Leg::class, array_merge(($attributes['products']['leg'] ?? []), ['leg_style_id'=>$legStyleId]));
+//
+////                    ddf(array_merge(($attributes['products'] ?? []),['product_style_id' => $line->id, 'component_id'=>$leg->id, 'component_type'=>Leg::class]));
+//                    $product = create(Product::class, array_merge(($attributes['products'] ?? []),['product_line_id' => $line->id, 'component_id'=>$leg->id, 'component_type'=>Leg::class]));
+////                    ddf($product);
+//                }
+//
+//            });
+//        });
+//
+//        return $category;
+//    }
+
+//    public static function validInventoryProduct($attributes = [])
+//    {
+//
+//        $category = self::createValidCategory($attributes);
+//        $product = $category->subCategories()->first()->productLines->first()->products->first();
+//
+//
+//        $section = create(Section::class,$attributes['section'] ?? []);
+//
+////        ddf($section);
+//        if(!isset($attributes['stock']) || $attributes['stock'] !== Stock::NO_CREATION){
+//            //simulate a staff member receiving the order
+//            $staffMember = create(Staff::class);
+////            ddf($staffMember);
+//            //add the product to stock
+//            $stockProduct = create(Stock::class, array_merge(($attributes['stock'] ?? []),['product_id' => $product->id, 'section_id' => $section->id]));
+////            ddf($stockProduct);
+//        }
+//
+//        if(isset($attributes['level']) && $attributes['level'] == true){
+//            $product->load('inventoryLevel');
+//        }
+//        return $product->load(['stockDetails', 'stockLevel']);
+//
+//    }
+}
