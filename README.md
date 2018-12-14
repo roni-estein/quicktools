@@ -35,7 +35,10 @@ This will,
  - run composer update
  - run yarn install
  - run yarn run development to test your system is configured
- #####TODO'S
+ 
+ 
+ ####TODO'S
+ 
  - [ ] overwrite auth stubs
  - [ ] determine if auth should be run  
   
