@@ -14,12 +14,32 @@ To install Wink, require it via Composer:
 composer require roniestein/quicktools
 ```
 
-Once Composer is done, run the following command:
+Once Composer is done, run the following command NOTE: THIS IS A DESTRUCTIVE COMMAND!!:
 
 ```
 php artisan preset quicktools
 ```
 
+This will,
+ - add a .gitignore
+ - clean your package.json and add a number of useful packages
+ - replace your composer.json with some handy packages
+ - setup phpunit.xml for rapid testing, and also update your tests to use the quictools classes
+ - add a new example unit test
+ - add a series of common rapid development commands
+ - initialize tailwind
+ - remove old public css and js
+ - add new app.js, bootstrap.js and app.css
+ - use postcss-preset-env app.css example
+ - run composer install
+ - run composer update
+ - run yarn install
+ - run yarn run development to test your system is configured
+ #####TODO'S
+ - [ ] overwrite auth stubs
+ - [ ] determine if auth should be run  
+  
+ 
 ## PHPStorm Shell Commands for MacOS Mojave
 
 On MacOS, Add the following to your aliases file, to give you a quick leg up on running commands
@@ -154,9 +174,9 @@ Wink is still under heavy development, I decided to ship it in this early stage 
 Here's the plan for what's coming:
 
 - [x] Customize Twitter/Facebook cards and SEO metadata.
-- [ ] Optimize CSS. Initialize Taiwind?
-- [ ] Optimize JS. Initialize Vue?
-- [ ] Optimize image uploads and allow cropping.
+- [x] Optimize CSS. Initialize Taiwind?
+- [x] Optimize JS. Initialize Vue?
+- [x] Optimize image uploads and allow cropping.
 - [ ] Add tests.
 
 
