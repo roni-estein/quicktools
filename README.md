@@ -198,17 +198,13 @@ Route::resource('post', FooController::res());
 
 ## Road map
 
-Wink is still under heavy development, I decided to ship it in this early stage so you can help me make it better, however I'm already using it to run multiple websites including my personal blog.
+Quicktools will continue to be developed for the macos, valet, local testing environment. Feel free to fork it or send me questions or issues. I decided to ship it in this early stage so you can help me make it better, however I'm already using it to run multiple websites including my personal blog.
 
 Here's the plan for what's coming:
 
-- [x] Customize Twitter/Facebook cards and SEO metadata.
-- [x] Optimize CSS. Initialize Taiwind?
-- [x] Optimize JS. Initialize Vue?
-- [x] Optimize image uploads and allow cropping.
-- [ ] Add tests.
-
-
+- [ ] Add tests
+- [ ] Add some congiration for other OS or editor platforms
+- [ ] Add nice aliases that people can opt into
 
 ## Contributing
 
