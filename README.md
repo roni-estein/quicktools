@@ -205,7 +205,7 @@ Here's the plan for what's coming:
 - [ ] Add tests
 - [ ] Add some congiration for other OS or editor platforms
 - [ ] Add nice aliases that people can opt into
-
+- [ ] Make Better Docs
 ## Contributing
 
 Check our [contribution guide](CONTRIBUTING.md).
