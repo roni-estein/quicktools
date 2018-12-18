@@ -108,6 +108,21 @@ body.modal-open{
     }
 }
 
+.label {
+    @apply text-white
+}
+
+.login-input{
+
+    @apply py-4 px-4 text-sm text-white max-w-sm w-full bg-black-transparent-1;
+
+    &:focus { outline: 0; }
+
+}
+
+.login-error{
+    @apply text-xx uppercase mt-1 pl-4 font-bold
+}
 .btn {
     @apply px-8 py-3 rounded-full uppercase;
     @screen lg { @apply text-xl; }

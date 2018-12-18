@@ -1,0 +1,56 @@
+@extends('layouts.app-without-nav')
+
+@section('content')
+    <form method="POST" action="{{ route('register') }}">
+        @csrf
+        <div class="h-screen bg-purple-dark flex flex-col px-6">
+            <div class="flex flex-col flex-grow justify-center mx-auto w-sm">
+                <div class="text-white py-6 text-3xl">{{ config('app.name') }}</div>
+                <div class="mb-4">
+                    {{--<label for="name" class="label">Name</label>--}}
+                    <input type="text" class="login-input {{ $errors->has('name') ? 'border-red-light':'' }}" name="name" id="name" placeholder="Your name ..." required autocomplete="something" value="{{ old('name') }}">
+                    @if($errors->has('name'))
+                        <div class="login-error">{{$errors->first('name')}}</div>
+                    @endif
+                </div>
+                <div class="mb-4 flex flex-col">
+                    <input type="text" class="login-input {{ $errors->has('email') ? 'border-red-light':'' }}"
+                           name="email" id="email" placeholder="Email address" required autocomplete="username"
+                           value="{{ old('email','') }}">
+                    @if($errors->has('email'))
+                        <div class="login-error">{{$errors->first('email')}}</div>
+                    @endif
+                </div>
+                <div class="mb-4">
+                    {{--<label for="password" class="label">Password</label>--}}
+                    <input type="password" class="login-input {{ $errors->has('password') ? 'border-red-light':'' }}" name="password" id="password" placeholder="Password" required autocomplete="new-password" value="{{ old('password') }}">
+                    @if($errors->has('password'))
+                        <div class="login-error">{{$errors->first('password')}}</div>
+                    @endif
+                </div>
+
+                <div class="mb-4">
+                    {{--<label for="password_confirmation" class="label">Password confirmationation</label>--}}
+                    <input type="password" class="login-input {{ $errors->has('password_confirmation') ? 'border-red-light':'' }}" name="password_confirmation" id="password_confirmation" placeholder="Confirm your password" required value="{{ old('password_confirmation') }}">
+                    @if($errors->has('password_confirmation'))
+                        <div class="login-error">{{$errors->first('password_confirmation')}}</div>
+                    @endif
+                </div>
+                <div class="mt-4">
+
+                    <button class="w-sm bg-white-transparent-5 hover:bg-white-transparent-7 py-4 text-black-transparent-5 uppercase tracking-wide">
+                        {{ __('Create Account') }}
+                    </button>
+                </div>
+                <div class="mt-4 text-xs text-purple-dark font-bold text-center">
+                    @if (Route::has('login'))
+                        <a class="ml-6 text-white-transparent-5" href="{{ route('login') }}">
+                            {{ __('Already have an account?') }}
+                        </a>
+                    @endif
+                </div>
+            </div>
+
+        </div>
+    </form>
+@endsection

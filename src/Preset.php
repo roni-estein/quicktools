@@ -16,20 +16,18 @@ class Preset extends LaravelPreset{
         static::$command = $command;
 
         static::issueWarning();
-        static::cleanSassDirectory();
-
+        static::scaffoldAuthentication();
         static::addGitIgnore();
         static::addResourceAssets();
         static::addBaseHelpers();
         static::addComposerJson();
         static::addTestHelpers();
         static::addTestSetup();
-        static::scaffoldRoutes();
         static::updatePackages($devDependancies = true);
         static::updateLaravelMix();
         static::updateBaseController();
 
-
+        static::cleanSassDirectory();
         static::removePublicFiles();
         static::runYarnInstall();
         static::initializeTailwind();
@@ -93,6 +91,16 @@ class Preset extends LaravelPreset{
         copy( __DIR__.'/stubs/bootstrap.js.stub',resource_path('js/bootstrap.js'));
     }
 
+    public static function scaffoldAuthentication()
+    {
+        if(static::$command->choice('Do you want to scaffold authentication now?', ['y'=>'yes', 'n'=>'no'],'y')){
+            static::$command->info('');
+            static::$command->info('Scaffolding authentication ...');
+            exec ('php artisan make:auth');
+            static::prepFilesForAuth();
+            static::$command->info('Scaffolding complete');
+        }
+    }
     public static function addBaseHelpers()
     {
         if( ! File::isDirectory(app_path('Helpers'))){
@@ -193,9 +201,6 @@ class Preset extends LaravelPreset{
     }
 
 
-
-
-
     public static function runComposerUpdate()
     {
         static::$command->info('');
@@ -217,7 +222,6 @@ class Preset extends LaravelPreset{
         exec('yarn run development');
     }
 
-
     public static function runValetLink()
     {
         static::$command->info('');
@@ -225,13 +229,41 @@ class Preset extends LaravelPreset{
         exec('valet link');
     }
 
-    public static function scaffoldRoutes()
+    public static function prepFilesForAuth()
     {
-        $answer = static::$command->choice('this is an example of a choice?',['yes', 'no'],'yes');
-        if($answer == 'yes'){
-            static::$command->info('');
-            static::$command->info('Scaffolding authentication...');
-            exec('php artisan make:auth');
+        // add partials directory
+        if( ! File::isDirectory(resource_path('views/layouts/partials'))){
+            File::makeDirectory(resource_path('views/layouts/partials'));
         }
+        
+        // add nambar base partial to partials directory
+        copy( __DIR__.'/stubs/_nav.blade.php.stub',resource_path('views/layouts/partials/_nav.blade.php'));
+
+        // update layouts.app
+        copy( __DIR__.'/stubs/app.blade.php.stub',resource_path('views/layouts/app.blade.php'));
+
+        // add new layouts
+        copy( __DIR__.'/stubs/app-with-nav.blade.php.stub',resource_path('views/layouts/app-with-nav.blade.php'));
+        copy( __DIR__.'/stubs/app-without-nav.blade.php.stub',resource_path('views/layouts/app-without-nav.blade.php'));
+        copy( __DIR__.'/stubs/app-with-nav-single-screen.blade.php.stub',resource_path('views/layouts/app-with-nav-single-screen.blade.php'));
+
+
+        // add new welcome.blade.php
+        copy( __DIR__.'/stubs/welcome.blade.php.stub',resource_path('views/welcome.blade.php'));
+
+        // add new auth passwords email
+        copy( __DIR__.'/stubs/auth-passwords-email.blade.php.stub',resource_path('views/auth/passwords/email.blade.php'));
+        // add new auth passwords reset
+        copy( __DIR__.'/stubs/auth-passwords-reset.blade.php.stub',resource_path('views/auth/passwords/reset.blade.php'));
+        // add new auth login
+        copy( __DIR__.'/stubs/auth-login.blade.php.stub',resource_path('views/auth/login.blade.php'));
+        // add new auth register
+        copy( __DIR__.'/stubs/auth-register.blade.php.stub',resource_path('views/auth/register.blade.php'));
+        // add new auth verify
+        copy( __DIR__.'/stubs/auth-verify.blade.php.stub',resource_path('views/auth/verify.blade.php'));
+
+        // add new home.blade.php
+        copy( __DIR__.'/stubs/home.blade.php.stub',resource_path('views/home.blade.php'));
+
     }
 }
