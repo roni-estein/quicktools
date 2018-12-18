@@ -16,6 +16,7 @@ class Preset extends LaravelPreset{
         static::$command = $command;
 
         static::issueWarning();
+        static::cleanSassDirectory();
 
         static::addGitIgnore();
         static::addResourceAssets();
@@ -23,11 +24,12 @@ class Preset extends LaravelPreset{
         static::addComposerJson();
         static::addTestHelpers();
         static::addTestSetup();
+        static::scaffoldRoutes();
         static::updatePackages($devDependancies = true);
         static::updateLaravelMix();
         static::updateBaseController();
 
-//        static::cleanSassDirectory();
+
         static::removePublicFiles();
         static::runYarnInstall();
         static::initializeTailwind();
@@ -83,6 +85,9 @@ class Preset extends LaravelPreset{
 
     public static function addResourceAssets()
     {
+        if( ! File::isDirectory(resource_path('css'))){
+            File::makeDirectory(resource_path('css'));
+        }
         copy( __DIR__.'/stubs/app.css.stub',resource_path('css/app.css'));
         copy( __DIR__.'/stubs/app.js.stub',resource_path('js/app.js'));
         copy( __DIR__.'/stubs/bootstrap.js.stub',resource_path('js/bootstrap.js'));
@@ -213,25 +218,20 @@ class Preset extends LaravelPreset{
     }
 
 
-
-
-
-
-
-
-
-
-    
-
-
-
-
-
-
     public static function runValetLink()
     {
         static::$command->info('');
         static::$command->info('Running valet link ...');
         exec('valet link');
+    }
+
+    public static function scaffoldRoutes()
+    {
+        $answer = static::$command->choice('this is an example of a choice?',['yes', 'no'],'yes');
+        if($answer == 'yes'){
+            static::$command->info('');
+            static::$command->info('Scaffolding authentication...');
+            exec('php artisan make:auth');
+        }
     }
 }
