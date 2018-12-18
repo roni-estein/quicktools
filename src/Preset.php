@@ -36,6 +36,7 @@ class Preset extends LaravelPreset{
         static::runComposerUpdate();
         static::runYarnDev();
         static::runValetLink();
+        static::openSite();
 
     }
 
@@ -267,4 +268,14 @@ class Preset extends LaravelPreset{
         copy( __DIR__.'/stubs/home.blade.php.stub',resource_path('views/home.blade.php'));
 
     }
+
+    public static function openSite(){
+        static::$command->info('');
+        $directory = pathinfo(base_path())['filename'];
+        
+        static::$command->info('Opening Site http://'.$directory.'.test...');
+        
+        exec('open http://'.$directory.'.test');
+    }
+
 }
