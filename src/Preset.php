@@ -287,7 +287,7 @@ class Preset extends LaravelPreset{
 
     public static function openSite(){
         static::$command->info('');
-        $directory = pathinfo(base_path())['filename'];
+        $directory = pathinfo(base_path())['basename'];
         
         static::$command->info('Opening Site http://'.$directory.'.test...');
         
