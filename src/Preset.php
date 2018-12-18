@@ -57,15 +57,31 @@ class Preset extends LaravelPreset{
         static::$command->info('');
         static::$command->warn('Here is a list of files that will be overwritten:');
         static::$command->info('');
-        static::$command->info($i++.'. /package.json'); // done
-        static::$command->info($i++.'. /webpack.mix.js'); // done
-        static::$command->info($i++.'. /resources/sass/**'); // done
-        static::$command->info($i++.'. /resources/css/yailwind-config.js'); // done
-        static::$command->info($i++.'. /tests/DomainTestCase.php'); // done
-        static::$command->info($i++.'. /tests/Assistant/ObjectFactory.php'); // done
-        static::$command->info($i++.'. /app/Http/Controllers/Controller.php'); //done
+        static::$command->info($i++.'. /package.json'); 
+        static::$command->info($i++.'. /composer.json'); 
+        static::$command->info($i++.'. /composer.lock'); 
+        static::$command->info($i++.'. /webpack.mix.js'); 
+        static::$command->info($i++.'. /resources/sass/**'); 
+        static::$command->info($i++.'. /resources/css/tailwind-config.js'); 
         static::$command->info($i++.'. /resources/css/app.css');
         static::$command->info($i++.'. /resources/js/app.js');
+        static::$command->info($i++.'. /resources/views/welcome.blade.php');
+        static::$command->info($i++.'. /resources/views/home.blade.php');
+        static::$command->info($i++.'. /resources/views/auth/login.blade.php');
+        static::$command->info($i++.'. /resources/views/auth/register.blade.php');
+        static::$command->info($i++.'. /resources/views/auth/verify.blade.php');
+        static::$command->info($i++.'. /resources/views/auth/passwords/email.blade.php');
+        static::$command->info($i++.'. /resources/views/auth/passwords/reset.blade.php');
+        static::$command->info($i++.'. /resources/views/auth/passwords/reset.blade.php');
+        static::$command->info($i++.'. /resources/views/layouts/partials/_nav.blade.php');
+        static::$command->info($i++.'. /resources/views/layouts/app.blade.php');
+        static::$command->info($i++.'. /resources/views/layouts/app-with-nav.blade.php');
+        static::$command->info($i++.'. /resources/views/layouts/app-with-nav-single-screen.blade.php');
+        static::$command->info($i++.'. /resources/views/layouts/app-without-nav.blade.php');
+        static::$command->info($i++.'. /tests/TestCase.php'); 
+        static::$command->info($i++.'. /tests/DomainTestCase.php'); 
+        static::$command->info($i++.'. /tests/Assistant/ObjectFactory.php'); 
+        static::$command->info($i++.'. /app/Http/Controllers/Controller.php');
 
 
         static::$command->info('');

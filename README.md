@@ -35,12 +35,38 @@ This will,
  - run composer update
  - run yarn install
  - run yarn run development to test your system is configured
- 
- 
- TODO'S
- 
- - [ ] overwrite auth stubs
- - [ ] determine if auth should be run  
+ - add new blade files with tailwind
+ - scaffold authentication
+ - open the site
+
+## List of files overwritten or added
+
+ - package.json 
+ - composer.json 
+ - composer.lock 
+ - webpack.mix.js 
+ - resources/sass/** 
+ - resources/css/tailwind-config.js 
+ - resources/css/app.css
+ - resources/js/app.js
+ - resources/views/welcome.blade.php
+ - resources/views/home.blade.php
+ - resources/views/auth/login.blade.php
+ - resources/views/auth/register.blade.php
+ - resources/views/auth/verify.blade.php
+ - resources/views/auth/passwords/email.blade.php
+ - resources/views/auth/passwords/reset.blade.php
+ - resources/views/auth/passwords/reset.blade.php
+ - resources/views/layouts/partials/_nav.blade.php
+ - resources/views/layouts/app.blade.php
+ - resources/views/layouts/app-with-nav.blade.php
+ - resources/views/layouts/app-with-nav-single-screen.blade.php
+ - resources/views/layouts/app-without-nav.blade.php
+ - tests/TestCase.php 
+ - tests/DomainTestCase.php 
+ - tests/Assistant/ObjectFactory.php 
+ - app/Http/Controllers/Controller.php
+
   
  
 ## PHPStorm Shell Commands for MacOS Mojave
