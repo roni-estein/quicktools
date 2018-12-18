@@ -1,14 +1,12 @@
 ## Introduction
 
-Quicktools's only job is to help you rapidly write and deploy tests to your [Laravel Application](https://laravel.com) while using PHPStorm. It's main purpose is to makw it easier start up a project without worrying about too many advanced configurations or Testing Add-ons. Also It adds some speed conveniences buy opening up each file you generate so you don't have to manually sync folders.
+Quicktools's only job is to help you rapidly write and deploy tests to your [Laravel Application](https://laravel.com) while using PHPStorm. It's main purpose is to makw it easier start up a project without worrying about too many advanced configurations or Testing Add-ons. Also It adds some speed conveniences buy opening up each file you generate so you don't have to manually sync folders. And it updates all built in views to use tailwind instead of bootstrap.
 
 //TODO:ADD AN IMAGE
 
 ## Installation
 
-Wink runs on any Laravel application, it uses a separate database connection and authentication system so that you don't have to modify any of your project code.
-
-To install Wink, require it via Composer:
+To install Quicktools, require it via Composer:
 
 ```
 composer require roniestein/quicktools
