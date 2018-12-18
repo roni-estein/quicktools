@@ -206,7 +206,7 @@ Here's the plan for what's coming:
 - [ ] Make Better Docs
 ## Contributing
 
-Check our [contribution guide](CONTRIBUTING.md).
+Check the [contribution guide](CONTRIBUTING.md).
 
 ## License
 
