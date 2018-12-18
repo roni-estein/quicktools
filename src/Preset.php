@@ -197,7 +197,8 @@ class Preset extends LaravelPreset{
     {
         static::$command->info('');
         static::$command->info('Initializing Tailwind ...');
-        exec('./node_modules/.bin/tailwind init resources/css/tailwind-config.js');
+        //exec('./node_modules/.bin/tailwind init resources/css/tailwind-config.js');
+        copy( __DIR__.'/stubs/tailwind-config.js.stub',resource_path('css/tailwind-config.js'));
     }
 
 
