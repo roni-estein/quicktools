@@ -110,9 +110,17 @@ class Preset extends LaravelPreset{
 
     public static function scaffoldAuthentication()
     {
-        if(static::$command->choice('Do you want to scaffold authentication now?', ['y'=>'yes', 'n'=>'no'],'y')){
+        static::$command->info('Do you want to scaffold authentication now?');
+        if(static::$command->choice('This will destroy existing authentication views', ['y'=>'yes', 'n'=>'no'],'y')){
             static::$command->info('');
             static::$command->info('Scaffolding authentication ...');
+            // remove current authentication to stop hanging when calling auth routes a second time.
+            // since all answers will be yes at this point
+            File::delete(resource_path('auth/login.blade.php'));
+            File::delete(resource_path('auth/register.blade.php'));
+            File::delete(resource_path('auth/verify.blade.php'));
+            File::delete(resource_path('auth/passwords/email.blade.php'));
+            File::delete(resource_path('auth/passwords/reset.blade.php'));
             exec ('php artisan make:auth');
             static::prepFilesForAuth();
             static::$command->info('Scaffolding complete');
