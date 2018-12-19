@@ -121,8 +121,9 @@ class Preset extends LaravelPreset{
             File::delete(resource_path('views/auth/verify.blade.php'));
             File::delete(resource_path('views/auth/passwords/email.blade.php'));
             File::delete(resource_path('views/auth/passwords/reset.blade.php'));
-            File::delete(resource_path('views/app.blade.php'));
+            File::delete(resource_path('views/layouts/app.blade.php'));
             File::delete(resource_path('views/home.blade.php'));
+
             static::$command->info('Scaffolding new authentication ...');
             exec ('php artisan make:auth');
             static::prepFilesForAuth();
