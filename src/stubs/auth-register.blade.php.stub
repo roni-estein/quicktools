@@ -38,7 +38,7 @@
                 </div>
                 <div class="mt-4">
 
-                    <button class="w-sm bg-white-transparent-5 hover:bg-white-transparent-7 py-4 text-black-transparent-5 uppercase tracking-wide">
+                    <button type="submit" class="login-button">
                         {{ __('Create Account') }}
                     </button>
                 </div>

@@ -30,7 +30,7 @@
                 </div>
                 <div class="mt-4">
 
-                    <button class="login-button">
+                    <button type="submit" class="login-button">
                         {{ __('Login') }}
                     </button>
                 </div>
