@@ -123,6 +123,15 @@ body.modal-open{
 .login-error{
     @apply text-xx uppercase mt-1 pl-4 font-bold
 }
+
+.login-button{
+    @apply w-sm bg-white-transparent-9 py-4 text-black-transparent-8 uppercase tracking-wide;
+
+    &:hover {
+         @apply bg-white;
+     }
+}
+
 .btn {
     @apply px-8 py-3 rounded-full uppercase;
     @screen lg { @apply text-xl; }

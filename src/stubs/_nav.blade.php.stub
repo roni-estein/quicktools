@@ -1,6 +1,6 @@
 <nav class="p-4 flex items-center w-full justify-between">
     <div class="">
-        <a class="no-underline" href="{{ url('/') }}">
+        <a class="no-underline text-primary" href="{{ url('/') }}">
             {{ config('app.name', 'Laravel') }}
         </a>
     </div>
@@ -11,10 +11,10 @@
             <ul class="navbar-nav ml-auto">
                 <!-- Authentication Links -->
                 @guest
-                    <a class="no-underline" href="{{ route('login') }}">{{ __('Login') }}</a>
+                    <a class="no-underline text-primary text-sm uppercase" href="{{ route('login') }}">{{ __('Login') }}</a>
 
                     @if (Route::has('register'))
-                        <a class="no-underline pl-4" href="{{ route('register') }}">{{ __('Register') }}</a>
+                        <a class="no-underline pl-4 text-primary text-sm uppercase" href="{{ route('register') }}">{{ __('Register') }}</a>
                     @endif
                 @else
                     <li class="nav-item dropdown">
