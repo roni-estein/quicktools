@@ -125,61 +125,11 @@ body.modal-open{
 }
 
 .login-button{
-    @apply w-sm bg-white-transparent-9 py-4 text-black-transparent-8 uppercase tracking-wide;
+    @apply max-w-sm w-full bg-white-transparent-9 py-4 text-black-transparent-8 uppercase tracking-wide;
 
     &:hover {
          @apply bg-white;
      }
-}
-
-.btn {
-    @apply px-8 py-3 rounded-full uppercase;
-    @screen lg { @apply text-xl; }
-
-    &:focus { outline: 0; }
-}
-
-.btn-orange {
-    @apply bg-orange text-white;
-    &:hover { @apply bg-teal }
-}
-
-.btn-white {
-    @apply bg-white text-grey-darker;
-    &:hover { @apply bg-teal text-white }
-}
-
-.welcome-banner {
-
-    background-image: url("/img/banner-1-20.jpg");
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-color: rgba(112, 112, 112, 0.85);
-    background-blend-mode: multiply;
-    overflow: hidden;
-
-    @apply flex flex-grow items-center justify-center text-white flex-col;
-}
-
-.dna-strand{
-    background-image: url("/img/pattern-blue-r.png");
-    background-size: contain;
-    background-repeat: repeat-x;
-    overflow: hidden;
-
-    @apply w-full h-full;
-}
-
-.separator {
-    background-image: url("/img/banner-2-19.jpg");
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-color: rgba(20, 20, 20, 0.85);
-    background-blend-mode: multiply;
-    background-position: center bottom;
-    overflow: hidden;
-
-    @apply flex flex-grow items-center justify-center flex-col h-64;
 }
 
 h1 {
