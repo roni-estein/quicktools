@@ -24,9 +24,10 @@
                     @endif
                 </div>
                 <div class="text-white text-sm ml-4">
-                    <input class="" type="checkbox" name="remember"
-                           id="remember" {{ old('remember') ? 'checked' : '' }}>
-                    <label class="text-white-transparent-5 text-sm" for="remember">{{ __('Remember Me') }}</label>
+                    <label class="checkbox inline-block py-4 pr-6">
+                        <input type="checkbox" name="remember" id="remember" class="login-checkbox">
+                        <span class="">Remember Me</span>
+                    </label>
                 </div>
                 <div class="mt-4">
 

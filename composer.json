@@ -1,6 +1,6 @@
 {
     "name": "roniestein/quicktools",
-    "description": "A set of functions to bootstrap a laravel project with commands ehanced for production speed.",
+    "description": "A set of functions to bootstrap a laravel project with commands enhanced for production speed.",
     "type": "library",
     "license": "MIT",
     "authors": [
@@ -17,7 +17,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "0.2"
+            "dev-master": "0.2.1"
         },
         "laravel": {
             "providers": [
