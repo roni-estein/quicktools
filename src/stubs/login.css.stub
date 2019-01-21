@@ -1,0 +1,116 @@
+
+.label { @apply text-white; }
+
+.login-input{
+  @apply py-4 px-4 text-sm text-white max-w-sm w-full bg-black-transparent-1;
+  &:focus { outline: 0; }
+
+}
+
+.login-error{
+  @apply text-xx uppercase mt-1 pl-4 font-bold
+}
+
+.login-button{
+  @apply max-w-sm w-full bg-white-transparent-9 py-4 text-black-transparent-8 uppercase tracking-wide;
+
+  &:hover {
+     @apply bg-white;
+  }
+}
+
+/*RADIO MAGIC*/
+
+label.radio {
+  @apply cursor-pointer relative;
+  & input[type="radio"] {
+    @apply hidden;
+
+    & + span:before {
+      content: '';
+      width: 1em;
+      height: 1em;
+      left: 0;
+      margin-top: 0;
+      @apply  absolute border border-white-transparent-6 rounded-full;
+    }
+
+    & + span:after {
+      content:'';
+      width: .500em;
+      height: .500em;
+      left: 0;
+      margin-left: .2500em;
+      margin-top: 0.2500em;
+      transform: scale(0.1);
+
+
+      opacity: 0;
+      transition: opacity 0.3s ease, transform 0.4s ease;
+
+      @apply absolute bg-white-transparent-6 rounded-full;
+    }
+
+
+    &:checked + span:after {
+     opacity: 1;
+     transform: scale(1);
+     transition: opacity 0.3s ease;
+    }
+  }
+}
+
+/*This fixes an odd set where the screens can't parse the center dot down
+might be a neet idea to change this to an svg in the future for more complete
+control over looks*/
+@custom-selector :--odd-text-sizes .text-sm, .text-lg, .text-3xl;
+:--odd-text-sizes label.radio input[type="radio"] + span:after,
+label.radio:--odd-text-sizes input[type="radio"] + span:after
+{
+
+  width: .4750em;
+  height: .4750em;
+  margin-top: .2900em;
+}
+
+/* CHECKBOX MAGIC*/
+
+label.checkbox {
+  @apply cursor-pointer relative;
+
+  & input[type="checkbox"] {
+    @apply hidden;
+    & + span {
+        padding-left: 1.4em;
+        @apply text-white-transparent-5;
+    }
+
+    & + span:before {
+      content:'';
+      width: 1em;
+      height: 1em;
+      left: 0px;
+      @apply  absolute bg-black-transparent-2 rounded-sm;
+    }
+
+    & + span:after {
+      content:'';
+      width: 0.9em;
+      height: 0.5em;
+      left: 0px;
+      margin-left: 0.15em;
+      margin-bottom: 0.1em;
+      transform: rotate(-25deg);
+      opacity: 0;
+      transition: opacity 0.1s linear, transform 0.2s ease;
+
+      @apply absolute border-white-transparent-6 bg-primary border-b-3 border-l-3 bg-transparent;
+    }
+
+    &:checked + span:after {
+       opacity: 1;
+       transform: rotate(-45deg);
+       transition: opacity 0.2s linear, transform 0.3s ease;
+     }
+  }
+}

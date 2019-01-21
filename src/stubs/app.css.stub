@@ -1,42 +1,42 @@
 /**
- * This injects Tailwind's base styles, which is a combination of
- * Normalize.css and some additional base styles.
- *
- * You can see the styles here:
- * https://github.com/tailwindcss/tailwindcss/blob/master/css/preflight.css
- *
- * If using `postcss-import`, use this import instead:
- *
- * @import "tailwindcss/preflight"
- */
+* This injects Tailwind's base styles, which is a combination of
+* Normalize.css and some additional base styles.
+*
+* You can see the styles here:
+* https://github.com/tailwindcss/tailwindcss/blob/master/css/preflight.css
+*
+* If using `postcss-import`, use this import instead:
+*
+* @import "tailwindcss/preflight"
+*/
 @tailwind preflight;
 
 /**
- * This injects any component classes registered by plugins.
- *
- * If using `postcss-import`, use this import instead:
- *
- * @import "tailwindcss/components"
- */
+* This injects any component classes registered by plugins.
+*
+* If using `postcss-import`, use this import instead:
+*
+* @import "tailwindcss/components"
+*/
 @tailwind components;
 
 /**
- * Here you would add any of your custom component classes stuff that you'd
- * want loaded *before* the utilities so that the utilities could still
- * override them.
- *
- * Example:
- *
- * .btn  ...
- * .form-input  ...
- *
- * Or if using a preprocessor or `postcss-import`:
- *
- * @import "components/buttons"
- * @import "components/forms"
- */
+* Here you would add any of your custom component classes stuff that you'd
+* want loaded *before* the utilities so that the utilities could still
+* override them.
+*
+* Example:
+*
+* .btn  ...
+* .form-input  ...
+*
+* Or if using a preprocessor or `postcss-import`:
+*
+* @import "components/buttons"
+* @import "components/forms"
+*/
 
---timeing: 4.0;
+--timing: 4.0;
 
 [v-cloak] {
     @apply hidden;
@@ -44,112 +44,66 @@
 
 @custom-selector :--headings h1, h2, h3, h4, h5, h6;
 
-body.modal-open{
-    overflow: hidden;
-}
+body.modal-open{ overflow: hidden; }
 
-.show-menu-enter-active {
-    transition: all .3s ease;
-}
-.show-menu-leave-active {
-    transition: all 0.3s ease;
-}
-.show-menu-enter, .show-menu-leave-to {
-    transform: translatex(100%);
-}
+.show-menu-enter-active {transition: all .3s ease;}
+.show-menu-leave-active {transition: all 0.3s ease;}
+.show-menu-enter, .show-menu-leave-to {transform: translatex(100%);}
 
-.fade-enter-active {
-    transition: all 0.5s ease;
-}
-.fade-leave-active {
-    transition: all 0.5s ease;
-}
-.fade-enter, .fade-leave-to {
-    opacity: 0;
-    transform: translatey(100%);
-}
+.fade-enter-active {transition: all 0.5s ease;}
+.fade-leave-active {transition: all 0.5s ease;}
+.fade-enter, .fade-leave-to {opacity: 0;transform: translatey(100%);}
 
 .h-screen {
 
-    height: 100vh;  /*fall back for other screen sizes*/
+  height: 100vh;  /*fall back for other screen sizes*/
 
-    @media screen and (orientation: portrait) {
+  @media screen and (orientation: portrait) {
 
-        /*CSS applied when the device is in portrait mode*/
+    /*CSS applied when the device is in portrait mode*/
 
-        @media (max-device-aspect-ratio: 3/4) {
-            height: calc(100vw * 1.333);
-        }
-        @media (max-device-aspect-ratio: 2/3) {
-            height: calc(100vw * 1.5);
-        }
-        @media (max-device-aspect-ratio: 10/16) {
-            height: calc(100vw * 1.6);
-        }
-        @media (max-device-aspect-ratio: 9/16) {
-            height: calc(100vw * 1.778);
-        }
-    }
+    @media (max-device-aspect-ratio: 3/4) {height: calc(100vw * 1.333);}
+    @media (max-device-aspect-ratio: 2/3) {height: calc(100vw * 1.5);}
+    @media (max-device-aspect-ratio: 10/16) {height: calc(100vw * 1.6);}
+    @media (max-device-aspect-ratio: 9/16) {height: calc(100vw * 1.778);}
+  }
 
-    @media screen and (orientation: landscape) {
-        /* CSS applied when the device is in landscape mode*/
-        @media (max-device-aspect-ratio: 3/4) {
-            height: calc(100vh * 1.333);
-        }
-        @media (max-device-aspect-ratio: 2/3) {
-            height: calc(100vh * 1.5);
-        }
-        @media (max-device-aspect-ratio: 10/16) {
-            height: calc(100vh * 1.6);
-        }
-        @media (max-device-aspect-ratio: 9/16) {
-            height: calc(100vh * 1.778);
-        }
-    }
+  @media screen and (orientation: landscape) {
+    /* CSS applied when the device is in landscape mode*/
+    @media (max-device-aspect-ratio: 3/4) {height: calc(100vh * 1.333);}
+    @media (max-device-aspect-ratio: 2/3) {height: calc(100vh * 1.5);}
+    @media (max-device-aspect-ratio: 10/16) {height: calc(100vh * 1.6);}
+    @media (max-device-aspect-ratio: 9/16) {height: calc(100vh * 1.778);}
+  }
 }
 
-.label {
-    @apply text-white
-}
-
-.login-input{
-
-    @apply py-4 px-4 text-sm text-white max-w-sm w-full bg-black-transparent-1;
-
-    &:focus { outline: 0; }
-
-}
-
-.login-error{
-    @apply text-xx uppercase mt-1 pl-4 font-bold
-}
-
-.login-button{
-    @apply max-w-sm w-full bg-white-transparent-9 py-4 text-black-transparent-8 uppercase tracking-wide;
-
-    &:hover {
-         @apply bg-white;
-     }
-}
-
+/**
+* Example of changing a font nested on screen size
+*/
 h1 {
-    @apply text-2xl text-white uppercase;
+  @apply text-2xl text-white uppercase;
 
-    @screen lg {
-        @apply text-5xl;
-    }
+  @screen lg {
+    @apply text-5xl;
+  }
 }
 
 
 /**
- * This injects all of Tailwind's utility classes, generated based on your
- * config file.
- *
- * If using `postcss-import`, use this import instead:
- *
- * @import "tailwindcss/utilities"
- */
+* This injects all of Tailwind's utility classes, generated based on your
+* config file.
+*
+* If using `postcss-import`, use this import instead:
+*
+* @import "tailwindcss/utilities"
+*/
 @tailwind utilities;
+
+/**
+* Get the preset form css for the login and registration screens
+* Extract it out so its easier to copy and deal with in the future.
+*/
+@import "forms/login.css";
 
 .fit-cover{ object-fit: cover; }
 .fit-contain{ object-fit: contain; }
@@ -174,17 +128,18 @@ h1 {
 
 .transition { transition: all .5s ease; }
 
+
 /**
- * Here you would add any custom utilities you need that don't come out of the
- * box with Tailwind.
- *
- * Example :
- *
- * .bg-pattern-graph-paper  ...
- * .skew-45  ...
- *
- * Or if using a preprocessor or `postcss-import`:
- *
- * @import "utilities/background-patterns"
- * @import "utilities/skew-transforms"
- */
+* Here you would add any custom utilities you need that don't come out of the
+* box with Tailwind.
+*
+* Example :
+*
+* .bg-pattern-graph-paper  ...
+* .skew-45  ...
+*
+* Or if using a preprocessor or `postcss-import`:
+*
+* @import "utilities/background-patterns"
+* @import "utilities/skew-transforms"
+*/

@@ -103,7 +103,11 @@ class Preset extends LaravelPreset{
         if( ! File::isDirectory(resource_path('css'))){
             File::makeDirectory(resource_path('css'));
         }
+        if( ! File::isDirectory(resource_path('css/forms'))){
+            File::makeDirectory(resource_path('css/forms'));
+        }
         copy( __DIR__.'/stubs/app.css.stub',resource_path('css/app.css'));
+        copy( __DIR__.'/stubs/login.css.stub',resource_path('css/forms/login.css'));
         copy( __DIR__.'/stubs/app.js.stub',resource_path('js/app.js'));
         copy( __DIR__.'/stubs/bootstrap.js.stub',resource_path('js/bootstrap.js'));
     }

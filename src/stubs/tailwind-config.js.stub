@@ -64,6 +64,8 @@ let colors = {
   'white-transparent-8' : 'hsla(0, 0% ,100%, 0.8)',
   'white-transparent-9' : 'hsla(0, 0% ,100%, 0.9)',
 
+  'transparent': 'hsla(0, 0% ,100%, 0)',
+
   'black': '#22292f',
   'grey-darkest': '#3d4852',
   'grey-darker': '#606f7b',
@@ -578,7 +580,6 @@ module.exports = {
     '48': '12rem',
     '64': '16rem',
     'full': '100%',
-    'screen': '100vh',
   },
 
 
