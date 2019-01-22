@@ -324,14 +324,13 @@ class Preset extends LaravelPreset{
         exec('git init');
         exec('git add README.md');
         exec('git commit -m "first commit"');
-        exec('git remote add origin https://github.com/roni-estein/'.static::directoryName().'.git');
-        exec('git push -u origin master');
-
 
         static::$command->info('');
         static::$command->info('Creating Private Github Repo roni-estein/'.static::directoryName());
 
         exec('hub create -p');
+        exec('git remote add origin https://github.com/roni-estein/'.static::directoryName().'.git');
+        exec('git push -u origin master');
     }
 
 
