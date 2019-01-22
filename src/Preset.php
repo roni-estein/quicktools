@@ -34,9 +34,12 @@ class Preset extends LaravelPreset{
 
 
         static::runComposerUpdate();
+        static::createFirstCommit();
         static::runYarnDev();
+
         static::runValetLink();
         static::openSite();
+
 
     }
 
@@ -303,11 +306,33 @@ class Preset extends LaravelPreset{
 
     public static function openSite(){
         static::$command->info('');
-        $directory = pathinfo(base_path())['basename'];
+        $directory = static::directoryName();
         
         static::$command->info('Opening Site http://'.$directory.'.test...');
         
         exec('open http://'.$directory.'.test');
     }
 
+    public static function createFirstCommit()
+    {
+        static::$command->info('');
+        static::$command->info('--------------------------------');
+        static::$command->info('Adding Readme.md');
+        exec('echo "# '.strtoupper(static::directoryName()).'" >> README.md');
+        static::$command->info('');
+        static::$command->info('Initializing Git ...');
+        exec('git init');
+        exec('git add README.md');
+        exec('git commit -m "first commit"');
+        static::$command->info('');
+        static::$command->info('Creating Private Github Repo roni-estein/'.static::directoryName());
+
+        exec('hub create -p');
+    }
+
+
+    protected static function directoryName()
+    {
+        return pathinfo(base_path())['basename'];
+    }
 }
