@@ -2,9 +2,10 @@
 
 namespace Quicktools\Tests;
 
-use Illuminate\Database\Eloquent\Collection as EloquentCollection;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 
 abstract class DBTestCase extends TestCase
 {
