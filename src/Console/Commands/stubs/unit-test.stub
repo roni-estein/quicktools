@@ -1,0 +1,12 @@
+<?php
+
+namespace DummyNamespace;
+
+use Tests\DomainTestCase;
+
+class DummyClass extends DomainTestCase
+{
+    
+    //
+    
+}
