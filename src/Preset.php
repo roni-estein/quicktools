@@ -27,6 +27,7 @@ class Preset extends LaravelPreset{
 
 
       static::addGitIgnore();
+      static::addGitKeepToStorageFiles();
       static::addResourceAssets();
       static::addBaseHelpers();
       static::addComposerJson();
@@ -35,6 +36,7 @@ class Preset extends LaravelPreset{
       static::updatePackages($devDependancies = true);
       static::updateLaravelMix();
       static::updateBaseController();
+
 
       static::cleanSassDirectory();
       static::removePublicFiles();
@@ -110,6 +112,26 @@ class Preset extends LaravelPreset{
       copy( __DIR__.'/stubs/.gitignore.stub',base_path('.gitignore'));
    }
 
+   public static function addGitKeepToStorageDirectories()
+   {
+      static::$command->info('');
+      static::$command->info('Add .gitkeep to storage directories ...');
+      $keepFiles = [
+         'app/public/.gitkeep',
+         'framework/cache/data/.gitkeep',
+         'framework/sessions/.gitkeep',
+         'framework/testing/.gitkeep',
+         'framework/views/.gitkeep',
+      ];
+      foreach($keepFiles as $file){
+         File::put(storage_path($file, ''));
+         exec('git add -f '. $file);
+      }
+      static::$command->info('Add the following files ...');
+      static::$command->info($keepFiles);
+   }
+
+
    public static function addResourceAssets()
    {
       if( ! File::isDirectory(resource_path('css'))){
@@ -127,7 +149,7 @@ class Preset extends LaravelPreset{
    public static function scaffoldAuthentication()
    {
       static::$command->info('Do you want to scaffold authentication now?');
-      if(static::$command->choice('This will destroy existing authentication views', ['y'=>'yes', 'n'=>'no'],'y')){
+      if(static::$command->choice('This will destroy existing authentication views', ['y'=>'yes', 'n'=>'no'],'y')) {
          static::buildAuthentication();
       }
    }
