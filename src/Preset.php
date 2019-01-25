@@ -27,7 +27,7 @@ class Preset extends LaravelPreset{
 
 
       static::addGitIgnore();
-      static::addGitKeepToStorageFiles();
+
       static::addResourceAssets();
       static::addBaseHelpers();
       static::addComposerJson();
@@ -124,7 +124,7 @@ class Preset extends LaravelPreset{
          'framework/views/.gitkeep',
       ];
       foreach($keepFiles as $file){
-         File::put(storage_path($file, ''));
+         File::put(storage_path($file),'');
          exec('git add -f '. $file);
       }
       static::$command->info('Add the following files ...');
@@ -367,6 +367,8 @@ class Preset extends LaravelPreset{
       exec('hub create -p');
       exec('git remote add origin https://github.com/roni-estein/'.static::directoryName().'.git');
       exec('git push origin master');
+
+      static::addGitKeepToStorageDirectories();
 
       exec('git add .');
       exec('git commit -m "Installed Laravel with roniestein/quicktools preset"');
