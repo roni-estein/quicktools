@@ -46,7 +46,6 @@ class Preset extends LaravelPreset{
 
       static::runComposerUpdate();
       static::createFirstCommit();
-      static::runYarnDev();
 
       static::runValetLink();
       static::openSite();
@@ -288,11 +287,11 @@ class Preset extends LaravelPreset{
    }
 
 
-   public static function runYarnDev()
+   public static function runYarnProd()
    {
       static::$command->info('');
       static::$command->info('Running command yarn run development to test for errors...');
-      exec('yarn run development');
+      exec('yarn run production');
    }
 
    public static function runValetLink()
@@ -347,6 +346,7 @@ class Preset extends LaravelPreset{
       static::$command->info('Opening Site http://'.$directory.'.test...');
 
       exec('open http://'.$directory.'.test');
+      exec('open https://github.com/roni-estein/'.$directory);
    }
 
    public static function createFirstCommit()
@@ -369,6 +369,7 @@ class Preset extends LaravelPreset{
       exec('git push origin master');
 
       static::addGitKeepToStorageDirectories();
+      static::runYarnProd();
 
       exec('git add .');
       exec('git commit -m "Installed Laravel with roniestein/quicktools preset"');
