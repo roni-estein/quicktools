@@ -100,7 +100,7 @@ class MakeModelWithFactoryAndMigration extends GeneratorCommand
 
         $table = $this->getTableName();
 
-        $this->call('makenopen:migration', [
+        $this->call('quicktools:make-migration', [
             'name' => "create_{$table}_table",
             '--create' => $table,
         ]);
