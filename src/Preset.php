@@ -124,11 +124,11 @@ class Preset extends LaravelPreset{
          'framework/views/.gitkeep',
       ];
       foreach($keepFiles as $file){
-         File::put(storage_path($file),'');
-         exec('git add -f '. $file);
+         exec('touch '.storage_path($file).'; git add -f '.storage_path($file));
       }
-      static::$command->info('Add the following files ...');
-      static::$command->info($keepFiles);
+      static::$command->info('Add the following files to repo ...');
+      static::$command->info(implode("\n", $keepFiles));
+
    }
 
 
