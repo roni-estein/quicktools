@@ -1,7 +1,5 @@
 <?php
 
-namespace DummyNamespace;
-
 use Illuminate\Database\Seeder;
 
 
