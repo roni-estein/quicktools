@@ -2,8 +2,9 @@
 
 namespace Quicktools;
 
-use Illuminate\Foundation\Console\PresetCommand;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Foundation\Console\PresetCommand;
 
 class QuicktoolsServiceProvider extends ServiceProvider {
 
