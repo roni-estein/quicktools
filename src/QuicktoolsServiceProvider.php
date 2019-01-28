@@ -26,6 +26,9 @@ class QuicktoolsServiceProvider extends ServiceProvider {
             Preset::install($command);
         });
         
+        Builder::macro('first', function($columns=['*']){
+            return $this->get($columns)->limit(1)->take(1)->firstOrFail();
+        });
 
         // databases
         // $this->publishes([
