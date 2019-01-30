@@ -51,7 +51,7 @@ abstract class DBTestCase extends TestCase
      */
     public function assertSameAttributes($expected, $actual): void
     {
-        $this->assertEquals($expected->fresh(), $actual);
+        $this->assertEquals($expected->fresh(), $actual->fresh());
     }
 
     /**
