@@ -4,7 +4,7 @@ namespace App\Http\Requests\Forms;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class poop5Form extends FormRequest
+class DummyClass extends FormRequest
 {
    /**
     * Determine if the user is authorized to make this request.
