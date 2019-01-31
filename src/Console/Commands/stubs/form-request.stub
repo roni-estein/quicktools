@@ -35,8 +35,6 @@ class DummyClass extends FormRequest
     */
    public function persist()
    {
-      return [
-         //
-      ];
+      
    }
 }
