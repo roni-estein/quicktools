@@ -19,6 +19,7 @@ class QuicktoolsServiceProvider extends ServiceProvider {
                 \Quicktools\Console\Commands\MakeViewCommand::class,
                 \Quicktools\Console\Commands\ModelMakeCommand::class,
                 \Quicktools\Console\Commands\TestMakeCommand::class,
+                \Quicktools\Console\Commands\MakeFormRequestCommand::class,
             ]);
 
         }
