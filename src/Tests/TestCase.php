@@ -27,8 +27,27 @@ abstract class TestCase extends BaseTestCase
             return is_null($this->original->getData()) ? null : collect($this->original->getData());
 
         });
-
-
+    
+        TestResponse::macro('assertViewContains', function ($key, $value) {
+            $this->data($key)->assertContains($value);
+            
+            return $this;
+        });
+    
+        TestResponse::macro('assertViewNotContains', function ($key, $value) {
+            $this->data($key)->assertNotContains($value);
+        
+            return $this;
+        });
+    
+    
+        TestResponse::macro('assertViewData', function ($callback) {
+            Assert::assertTrue($callback((object) $this->oiginal->getData()));
+        
+            return $this;
+        });
+    
+        
         BaseCollection::macro('assertEquals', function ($items) {
             Assert::assertCount($items->count(), $this);
 
