@@ -3,10 +3,38 @@
 namespace DummyNamespace;
 
 use Tests\DomainTestCase;
+use Illuminate\Foundation\Testing\TestResponse;
 
 class DummyClass extends DomainTestCase
 {
-    
+    const TEST_ROUTE = 'example.store';
+
     //
-    
+
+    protected function submitWithoutExceptionHanding($attributes = []): TestResponse
+    {
+        return $this
+            ->post(route(self::TEST_ROUTE, ['client' => $this->client->id]), $this->getValidFields($attributes));
+    }
+
+    protected function submitValidFields($attributes = []): TestResponse
+    {
+        return $this
+            ->withExceptionHandling()
+            ->post(route(self::TEST_ROUTE, ['client' => $this->client->id]), $this->getValidFields($attributes));
+    }
+
+    protected function getValidFields($attributes = []): array
+    {
+        $baseArray = [
+            'example_field' => true,
+            'another_example' => '123 Fake St',
+        ];
+
+        return array_merge(
+            $baseArray,
+            // $otherPossibleFieldSource, // or Example::getOptions(),
+            $attributes
+        );
+    }
 }
