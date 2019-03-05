@@ -9,7 +9,9 @@
             "email": "roni.estein@gmail.com"
         }
     ],
-    "require": {},
+    "require": {
+        "php": "^7.0"
+    },
     "autoload": {
         "psr-4": {
             "Quicktools\\": "src/"
@@ -17,7 +19,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "0.2.32-dev"
+            "dev-master": "0.2.33-dev"
         },
         "laravel": {
             "providers": [

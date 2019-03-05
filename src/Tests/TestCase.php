@@ -47,20 +47,67 @@ abstract class TestCase extends BaseTestCase
             return $this;
         });
     
+        TestResponse::macro('assertPageComponentContains', function(...$options){
+            if(count($options) === 1 ){
+                collect($this->data('data'))->assertContains($options[0]);
+            
+                return $this;
+            }elseif (count($options) === 2) {
+            
+                $this->data('data')[$options[0]]->assertEquals($options[1]);
+            }
+        });
+    
+        TestResponse::macro('assertPageComponentNotContains', function($key, $value){
+            $this->data('data')[$key]->assertNotContains($value);
         
+            return $this;
+        });
+    
+    
+        TestResponse::macro('assertViewData', function ($callback) {
+            Assert::assertTrue($callback((object) $this->oiginal->getData()));
+        
+            return $this;
+        });
+    
+        BaseCollection::macro('equals', function($items){
+            if($items->count() !== $this->count())
+                return false;
+        
+            $this->zip($items)->each(function ($itemPair) {
+                if(gettype($itemPair[0]) !== gettype($itemPair[1])){
+                    return false;
+                }
+                return (($itemPair[0] <=> $itemPair[1]) == 0);
+            });
+        
+        });
+    
         BaseCollection::macro('assertEquals', function ($items) {
             Assert::assertCount($items->count(), $this);
-
+        
             $this->zip($items)->each(function ($itemPair) {
-                Assert::assertTrue($itemPair[0]->is($itemPair[1]));
+                if(gettype($itemPair[0]) !== gettype($itemPair[1])){
+                    Assert::fail(
+                        $itemPair[0] . ' is a '. gettype($itemPair[0]) . ' and ' .
+                        $itemPair[1] . ' is a '. gettype($itemPair[1])
+                    );
+                }
+                
+                Assert::assertTrue(
+                    ($itemPair[0] <=> $itemPair[1]) == 0 || //primitives
+                    $itemPair[0]->is($itemPair[1])      //laravel models and objects that inherit "is"
+            
+                );
             });
         });
-
+    
         BaseCollection::macro('assertContains', function ($item) {
-
-            Assert::assertTrue($this->contains($item));
+            Assert::assertTrue($this->contains($item) || $this->equals($item));
         });
-
+        
+        
         BaseCollection::macro('assertDoesNotContain', function ($item) {
             Assert::assertFalse($this->contains($item));
         });
