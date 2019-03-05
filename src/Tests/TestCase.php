@@ -19,7 +19,16 @@ abstract class TestCase extends BaseTestCase
     public function setUp()
     {
         parent::setUp();
-
+    
+        TestResponse::macro('assertCreated', function () {
+            Assert::assertTrue(
+                201 === $this->getStatusCode(),
+                'Response status code ['.$this->getStatusCode().'] does not match expected 201 status code.'
+            );
+        
+            return $this;
+        });
+        
         TestResponse::macro('data', function ($key = null) {
             if (!is_null($key)) {
                 return $this->original->getData()[$key];
