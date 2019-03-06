@@ -56,14 +56,45 @@ abstract class TestCase extends BaseTestCase
             return $this;
         });
     
-        TestResponse::macro('assertPageComponentContains', function(...$options){
-            if(count($options) === 1 ){
-                collect($this->data('data'))->assertContains($options[0]);
+        TestResponse::macro('assertPageComponentContains', function (...$options) {
+            if (count($options) === 1) {
+                $passes = collect($this->data('data'))->first(function ($item) use ($options) {
+                    return ($item <=> $options[0]) == 0 || $item->is($options[0]);
+                });
+            
+                Assert::assertNotNull($passes, $this->formatFailMessage($options[0], ':attribute not found in this component'));
+//                assertContains($options[0]);
             
                 return $this;
-            }elseif (count($options) === 2) {
+            } elseif (count($options) === 2) {
+                $expected = $this->data('data')[$options[0]];
+                $given = $options[1];
             
-                $this->data('data')[$options[0]]->assertEquals($options[1]);
+                // There is no method_exists that works on a macro,
+                // So make a try catch loop to check for assertions
+                // an equality functions
+            
+                try {
+                    $expected->assertEquals($given);
+                } catch (\BadMethodCallException $e) {
+                    try {
+                        $expected->assertContains($given);
+                    } catch (\BadMethodCallException $e) {
+                        if (method_exists($expected, 'is')) {
+                            Assert::assertTrue($expected->is($given));
+                        } else {
+                            Assert::assertTrue($expected <=> $given);
+                        }
+                    }
+                }
+            }
+        });
+    
+        TestResponse::macro('formatFailMessage', function ($variable, $message) {
+            if ( ! is_array($variable)) {
+                $str =  str_replace(':attribute', get_class($variable), $message);
+            
+                return $str."\nDetails - ".$variable;
             }
         });
     
