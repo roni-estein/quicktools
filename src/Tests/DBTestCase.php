@@ -12,7 +12,7 @@ abstract class DBTestCase extends TestCase
 {
     use RefreshDatabase, WithFaker;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

@@ -16,7 +16,7 @@ abstract class TestCase extends BaseTestCase
     // This will even drill down to view partials
     use Viewable;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
     

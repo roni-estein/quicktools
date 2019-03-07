@@ -10,7 +10,7 @@
         }
     ],
     "require": {
-        "php": "^7.0"
+        "php": "^7.1"
     },
     "autoload": {
         "psr-4": {
@@ -19,7 +19,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "0.2.35-dev"
+            "dev-master": "0.3.0-dev"
         },
         "laravel": {
             "providers": [
