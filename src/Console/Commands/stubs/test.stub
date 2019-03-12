@@ -34,6 +34,9 @@ class DummyClass extends DomainTestCase
             ->assertSessionHasErrors('field');
     }
 
+    ////////////////////// FEATURE TESTS //////////////////////
+
+    
 
     ////////////////////// TEST HELPERS //////////////////////
 

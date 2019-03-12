@@ -63,7 +63,6 @@ abstract class TestCase extends BaseTestCase
                 });
             
                 Assert::assertNotNull($passes, $this->formatFailMessage($options[0], ':attribute not found in this component'));
-//                assertContains($options[0]);
             
                 return $this;
             } elseif (count($options) === 2) {
