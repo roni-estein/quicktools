@@ -114,10 +114,12 @@ abstract class TestCase extends BaseTestCase
                 });
                 
                 Assert::assertNotNull($passes, $this->formatFailMessage($options[0], ':attribute not found in this component'));
-//                assertContains($options[0]);
                 
                 return $this;
             } elseif (count($options) === 2) {
+                if(!isset ($this->data('data')[$options[0]])){
+                    Assert::fail('No prop : "'. $options[0]. '" foound on this component!' );
+                }
                 $expected = $this->data('data')[$options[0]];
                 $given = $options[1];
                 
