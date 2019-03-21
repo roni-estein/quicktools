@@ -118,7 +118,7 @@ abstract class TestCase extends BaseTestCase
                 return $this;
             } elseif (count($options) === 2) {
                 if(!isset ($this->data('data')[$options[0]])){
-                    Assert::fail('No prop : "'. $options[0]. '" foound on this component!' );
+                    Assert::fail('No prop data : "'. $options[0]. '" foound for this component!' );
                 }
                 $expected = $this->data('data')[$options[0]];
                 $given = $options[1];
