@@ -7,6 +7,9 @@ use Carbon\Carbon;
 use Tests\DomainTestCase;
 use Illuminate\Foundation\Testing\TestResponse;
 
+
+// STORAGE TEST
+
 class DummyClass extends DomainTestCase
 {
     const TEST_ROUTE = 'example.store';
