@@ -35,8 +35,6 @@ class Preset extends LaravelPreset{
       static::addTestSetup();
       static::updatePackages($devDependancies = true);
       static::updateLaravelMix();
-      static::updateBaseController();
-
 
       static::cleanSassDirectory();
       static::removePublicFiles();
@@ -94,7 +92,6 @@ class Preset extends LaravelPreset{
       static::$command->info($i++.'. /tests/TestCase.php');
       static::$command->info($i++.'. /tests/DomainTestCase.php');
       static::$command->info($i++.'. /tests/Assistant/ObjectFactory.php');
-      static::$command->info($i++.'. /app/Http/Controllers/Controller.php');
 
 
       static::$command->info('');
@@ -233,11 +230,6 @@ class Preset extends LaravelPreset{
       $file = str_replace('DummyDirectory', $directory,$file);
       File::put(base_path('webpack.mix.js'), $file);
 
-   }
-
-   public static function updateBaseController()
-   {
-      copy( __DIR__.'/stubs/BaseController.stub',app_path('/Http/Controllers/Controller.php'));
    }
 
    ///////////////////////////////  CLEANING COMMANDS ///////////////////////////////

@@ -20,11 +20,10 @@ class DummyClass extends DomainTestCase
     /** @test */
     public function a_example_can_be_saved()
     {
-        $this->submitFields()
-            ->assertSessionHasNoErrors()
-            ->assertCreated();
+        $this->submitFieldsNoExceptions()
+        ->assertCreated();
 
-        $this->assertDatabaseHas('examples', $this->getValidFields());
+        $this->assertDatabaseHas('examples', $this->storedFields());
     }
 
 
@@ -62,14 +61,27 @@ class DummyClass extends DomainTestCase
             ->post(route(self::TEST_ROUTE, []), $this->getValidFields($attributes));
     }
 
+    private function storedFields($overwrite = [])
+    {
+        $filteredKeys = [
+            'user_id' => $this->user->id,
+            'example_id' => $this->example->id,
+            'notes' => null,
+        ];
+
+        return array_intersect_key($overwrite + $filteredKeys, $filteredKeys);
+    }
+
     protected function getValidFields($attributes = []): array
     {
+        //MAYBE FIELDS THAT GET SAVED TO A SESSION
         $baseArray = [
-            'example_field' => true,
-            'another_example' => '123 Fake St',
+            'non_table_form_field' => true,
+            'another_non_table_form_field' => '123 Fake St',
         ];
 
         return array_merge(
+            $this->storedFields(),
             $baseArray,
             // $otherPossibleFieldSource, // or Example::getOptions(),
             $attributes
