@@ -4,8 +4,6 @@ namespace DummyNamespace;
 
 use Illuminate\Database\Seeder;
 
-
-
 class DummyModel extends Seeder
 {
     /**

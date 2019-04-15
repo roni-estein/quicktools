@@ -23,7 +23,6 @@ class DummyClass extends DomainTestCase
         $response->assertPageComponentContains('things', []);
     }
 
-
     /** @test */
     public function example_page_component_contains_current_things()
     {
@@ -31,11 +30,11 @@ class DummyClass extends DomainTestCase
         $response->assertPageComponentContains('things', Things::current());
     }
 
-
     ////////////////////// AXIOS TESTS //////////////////////
     
     /** @test */
-    public function an_axios_get_request_to_change_the_date_gets_new_things() {
+    public function an_axios_get_request_to_change_the_date_gets_new_things()
+    {
         $things = create(Thing::class, ['user_id' => auth()->id(), 'date' => Carbon::today()], 3);
         $updatedThings = create(Slot::class, ['user_id' => auth()->id(), 'date' => Carbon::tomorrow()], 3);
         $this->getRoute()
@@ -83,10 +82,12 @@ class DummyClass extends DomainTestCase
     protected function getRouteTest($attributes = []): TestResponse
     {
         ddf($this->getValidFields($attributes));
+
         return $this
             ->withExceptionHandling()
             ->get(route(self::TEST_ROUTE, $this->getValidFields($attributes)));
     }
+
     protected function getRouteNoExceptions($attributes = []): TestResponse
     {
         return $this

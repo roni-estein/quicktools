@@ -7,7 +7,6 @@ use Carbon\Carbon;
 use Tests\DomainTestCase;
 use Illuminate\Foundation\Testing\TestResponse;
 
-
 // STORAGE TEST
 
 class DummyClass extends DomainTestCase
@@ -15,7 +14,6 @@ class DummyClass extends DomainTestCase
     const TEST_ROUTE = 'example.store';
 
     ////////////////////// CONTROL TESTS //////////////////////
-
 
     /** @test */
     public function a_example_can_be_saved()
@@ -25,7 +23,6 @@ class DummyClass extends DomainTestCase
 
         $this->assertDatabaseHas('examples', $this->storedFields());
     }
-
 
     ////////////////////// INVALID TESTS //////////////////////
 

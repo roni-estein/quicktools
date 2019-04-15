@@ -33,3 +33,5 @@ stash/*
 */.DS_Store
 
 /project-docs/~*
+.phpstorm.meta.php
+_ide_helper.php

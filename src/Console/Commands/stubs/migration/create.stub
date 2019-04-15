@@ -6,21 +6,20 @@ use Illuminate\Database\Migrations\Migration;
 
 class DummyClass extends Migration
 {
-   /**
-    * Run the migrations.
-    *
-    * @return void
-    */
-   public function up()
-   {
-      Schema::create('DummyTable', function (Blueprint $table) {
-         $table->increments('id');
-         $table->string('name');
-         $table->string('slug')->nullable();
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::create('DummyTable', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('name');
+            $table->string('slug')->nullable();
          
 
-         myTimestamps($table);
-      });
-   }
-
+            myTimestamps($table);
+        });
+    }
 }
