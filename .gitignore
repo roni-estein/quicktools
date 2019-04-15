@@ -33,3 +33,4 @@ stash/*
 */.DS_Store
 
 /project-docs/~*
+\.php_cs\.cache

@@ -6,23 +6,8 @@ use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
-use Prophecy\Exception\Doubler\MethodNotFoundException;
 
 class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
-
-    public static function at($action)
-    {
-        if(method_exists(static::class, $action))
-            return [static::class, $action];
-
-        Throw new MethodNotFoundException('Method '. $action. '() not found in class '. static::class,static::class,$action);
-    }
-
-    public static function res()
-    {
-        return '\\'.static::class;
-    }
-
 }

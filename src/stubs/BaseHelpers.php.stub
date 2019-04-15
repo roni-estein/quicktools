@@ -1,74 +1,79 @@
 <?php
 
 use Carbon\Carbon;
-
-use Illuminate\Support\Collection;
-use Illuminate\Support\Debug\HtmlDumper;
-use Illuminate\Support\Facades\DB;
 use jc21\CliTable;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 
-function decamelize($string) {
+function decamelize($string)
+{
     return strtolower(preg_replace(['/([a-z\d])([A-Z])/', '/([^_])([A-Z][a-z])/'], '$1_$2', $string));
 }
 
-function getShortClassSlug($object){
+function getShortClassSlug($object)
+{
     return decamelize((new \ReflectionClass($object))->getShortName());
 }
 
-function getShortClassName($object){
+function getShortClassName($object)
+{
     return (new \ReflectionClass($object))->getShortName();
 }
 
-function ddTable(Collection $collection){
+function ddTable(Collection $collection)
+{
     ddf(printTable($collection));
 }
 
-function ignoreMockFor($class){
+function ignoreMockFor($class)
+{
     unset(app()[$class]);
 }
 
 function printTable($collection)
 {
-
     if ($collection instanceof Illuminate\Database\Eloquent\Collection) {
         return dbTable($collection);
     } elseif ($collection instanceof Illuminate\Support\Collection) {
         return baseTable($collection);
-    }
-    elseif (is_array($collection)){
+    } elseif (is_array($collection)) {
         return arrayTable($collection);
     }
 
     throw new \Exception('Trying to print a table that is not in a proper format');
 }
-function arrayTable($col){
+function arrayTable($col)
+{
     return baseTable(collect($col));
 }
 
-function baseTable(Collection $col){
+function baseTable(Collection $col)
+{
     $table = new CliTable();
     // isolate the column headers of the table
-    collect((Array)$col->first())->keys()->each( function($key) use ($table){
-        $table->addField($key,$key);
+    collect((Array) $col->first())->keys()->each(function ($key) use ($table) {
+        $table->addField($key, $key);
     });
-    $col = $col->map( function($row){
-        return (Array)$row;
+    $col = $col->map(function ($row) {
+        return (Array) $row;
     });
     $table->injectData($col->all());
+
     return $table->display();
 }
 
-function dbTable(Illuminate\Database\Eloquent\Collection $col){
+function dbTable(Illuminate\Database\Eloquent\Collection $col)
+{
     $table = new CliTable();
     // isolate the column headers of the table
-    collect((Array)$col->first()->tableHeaders())->each( function($key) use ($table){
-        $table->addField($key,$key);
+    collect((Array) $col->first()->tableHeaders())->each(function ($key) use ($table) {
+        $table->addField($key, $key);
     });
 
     $table->injectData($col->all());
+
     return $table->display();
     ddf($table->display(), 2, 2);
-
 }
 
 /**
@@ -78,8 +83,8 @@ function dbTable(Illuminate\Database\Eloquent\Collection $col){
  * DDF is just a wrapper for dd to allow you some more information about the calling
  * functions, formats each line with backtraceLine function
  */
-function ddf($var, $levels = 1, $start = 1){
-
+function ddf($var, $levels = 1, $start = 1)
+{
     $trace = debug_backtrace();
     for ($i = $start; $i < $levels + $start ; $i++) {
         backtraceLine($trace, $i);
@@ -97,25 +102,32 @@ function ddf($var, $levels = 1, $start = 1){
  * during a ddf function call. Instead of using the dd function in testing and not
  * remembering where you called it.
  */
-function backtraceLine($trace, $line){
-
+function backtraceLine($trace, $line)
+{
     $str = isset($trace[$line]["class"]) ? $trace[$line]["class"].'\\':'';
     $str .= $trace[$line]["function"];
     $str.='(';
     $args = collect($trace[$line]["args"]);
 
-    $str .= $args->map(function($item){
-        if (is_object($item)) return get_class($item);
-        try{
-            if (is_array($item)) return '['.implode(',', $item).']';
-        }catch (\Exception $e){
+    $str .= $args->map(function ($item) {
+        if (is_object($item)) {
+            return get_class($item);
+        }
+
+        try {
+            if (is_array($item)) {
+                return '['.implode(',', $item).']';
+            }
+        } catch (\Exception $e) {
             dd($e->getTrace());
         }
+
         return $item;
     });
 
     $str.=')';
-    dump( $str );
+    dump($str);
+
     return substr($trace[$line]["function"], -9) != "{closure}";
 }
 
@@ -143,9 +155,9 @@ function ne($var)
 {
     if (empty($var) || is_null($var)) {
         return "null";
-    } else {
-        return $var;
     }
+
+    return $var;
 }
 
 
@@ -161,29 +173,26 @@ function myTimestamps(Illuminate\Database\Schema\Blueprint $table)
 
     //WHILE RUNNING UNIT TESTS
     if (app()->runningUnitTests()) {
-
         $table->timestamps();
 //       ddf($table);
         return 0;
-    } else {
+    }
 
-        $table->timestamp('created_at')->useCurrent();
+    $table->timestamp('created_at')->useCurrent();
 
-        //check if using a mysql or sql library
+    //check if using a mysql or sql library
 
-        //FIX THIS LATER ITS STALLING TESTS
-        //TEMP HACK
+    //FIX THIS LATER ITS STALLING TESTS
+    //TEMP HACK
 
 //        $table->timestamp('updated_at')->useCurrent();
 
-        if (env('DB_CONNECTION') == 'mysql') {
-            $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
-        } elseif (env('DB_CONNECTION') == 'sqlite') {
-            $table->timestamp('updated_at')->useCurrent();
-            DB::RAW('CREATE TRIGGER update_ts_trigger AFTER UPDATE On ' . $table->getTable() . ' BEGIN update ' . $table->getTable() . ' SET updated_at = CURRENT_TIMESTAMP WHERE id = NEW.id; END;');
-        }
+    if (env('DB_CONNECTION') == 'mysql') {
+        $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
+    } elseif (env('DB_CONNECTION') == 'sqlite') {
+        $table->timestamp('updated_at')->useCurrent();
+        DB::RAW('CREATE TRIGGER update_ts_trigger AFTER UPDATE On ' . $table->getTable() . ' BEGIN update ' . $table->getTable() . ' SET updated_at = CURRENT_TIMESTAMP WHERE id = NEW.id; END;');
     }
-
 }
 
 function loggedBoolean(Illuminate\Database\Schema\Blueprint $table, $fieldName)
@@ -202,7 +211,6 @@ function loggedDate(Illuminate\Database\Schema\Blueprint $table, $fieldName)
 
 function setLoggedDate($table, $field, $date, $staff, $record)
 {
-
     DB::statement('update ' . $table . '
                         set 
                         ' . $field . ' = "' . $date . '",
@@ -213,7 +221,6 @@ function setLoggedDate($table, $field, $date, $staff, $record)
 
 function clearLoggedDate($table, $field, $staff, $record)
 {
-
     DB::statement('update ' . $table . '
                         set 
                         ' . $field . ' = NULL,
@@ -224,7 +231,6 @@ function clearLoggedDate($table, $field, $staff, $record)
 
 function updatePositiveLoggedBoolean($table, $field, $staff, $record)
 {
-
     DB::statement('update ' . $table . '
                         set 
                         ' . $field . ' = 1,
@@ -235,7 +241,6 @@ function updatePositiveLoggedBoolean($table, $field, $staff, $record)
 
 function updateNegativeLoggedBoolean($table, $field, $staff, $record)
 {
-
     DB::statement('update ' . $table . '
                         set 
                         ' . $field . ' = 0,
@@ -303,19 +308,20 @@ function checkPhoneLength($number)
 function formatPhone($number)
 {
     $number = onlyDigits($number);
-    if (!checkPhoneLength($number)) {
-        Throw new Exception('invalid phone number: *' . $number . '*', 0);
+    if ( ! checkPhoneLength($number)) {
+        throw new Exception('invalid phone number: *' . $number . '*', 0);
     }
+
     return '(' . substr($number, -10, 3) . ') '
         . substr($number, -7, 3) . '-'
         . substr($number, -4, 4);
-
 }
 
 function UserLogoutwithRoute($request, $route)
 {
     Auth::guard('web')->logout();
     $request->session()->invalidate();
+
     return redirect($route);
 }
 
@@ -323,15 +329,16 @@ function UserLogoutwithView($request, $view, $data = null)
 {
     Auth::guard('web')->logout();
     $request->session()->invalidate();
+
     return view($view)->withData($data);
 }
 
 function dumpSessionErrors()
 {
-
     if (session()->has('errors')) {
         return dump(session('errors'))->toArray();
     }
+
     return dump('NO ERRORS IN SESSION');
 }
 
@@ -343,9 +350,11 @@ function dieSessionErrors()
     ddf('NO ERRORS IN SESSION');
 }
 
-function ddsql($builder, $replace = false){
-    if (! $replace)
+function ddsql($builder, $replace = false)
+{
+    if ( ! $replace) {
         return ddf([$builder->toSql(), $builder->getBindings()]);
+    }
     $sql = $builder->toSql();
     ddf(str_replace_array('?', $builder->getBindings(), $sql));
 }

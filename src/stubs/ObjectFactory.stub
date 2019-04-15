@@ -17,7 +17,7 @@ namespace Tests\Assistant;
 |-------------------------------------------------------------------------------
 |   Object factories are used when you have to build up something quite large
 |   and inter related often. Here are a couple of examples to look at
-|   
+|
 */
 class ObjectFactory
 {

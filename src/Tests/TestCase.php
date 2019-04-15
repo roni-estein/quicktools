@@ -74,7 +74,7 @@ abstract class TestCase extends BaseTestCase
             
         });
         
-        BaseCollection::macro('assertEquals', function ($items, $orderedKey = null) {
+        BaseCollection::macro('assertEquals', function ($items, $orderedKey = null){
             if (is_array($items)) {
                 $items = collect($items);
             }
@@ -88,19 +88,24 @@ abstract class TestCase extends BaseTestCase
                 $items = $items->sortBy($orderedKey);
             }
             
-            $self->zip($items)->each(function ($itemPair) {
+            $self->zip($items)->each(function ($itemPair) use ($self, $items){
                 if (gettype($itemPair[0]) !== gettype($itemPair[1])) {
                     Assert::fail(
                         $itemPair[0] . ' is a ' . gettype($itemPair[0]) . ' and ' .
                         $itemPair[1] . ' is a ' . gettype($itemPair[1])
                     );
                 }
-                
-                Assert::assertTrue(
-                    ($itemPair[0] <=> $itemPair[1]) == 0 || //primitives
-                    $itemPair[0]->is($itemPair[1])   //laravel models and objects that inherit "is"
-                    , $itemPair[0] . ' is not equal to ' . $itemPair[1]
-                );
+    
+                if( is_a($itemPair[0], "Illuminate\Support\Collection") && is_a($itemPair[0],"Illuminate\Support\Collection")){
+                    $itemPair[0]->assertEquals($itemPair[1]);
+                }
+                else{
+                    Assert::assertTrue(
+                        ($itemPair[0] <=> $itemPair[1]) == 0 || //primitives
+                        $itemPair[0]->is($itemPair[1])   //laravel models and objects that inherit "is"
+                        , $itemPair[0] . ' is not equal to ' . $itemPair[1] . 'in collections :'."\n\n".$self."\n\n".$this
+                    );
+                }
             });
         });
         
@@ -108,7 +113,8 @@ abstract class TestCase extends BaseTestCase
         // VUE PAGE COMPONENTS
         
         TestResponse::macro('assertPageComponentContains', function (...$options) {
-            if (count($options) === 1) {
+            if (count($options) === 1 || count($options) === 2 && gettype($options[1]) == 'string') {
+                //todo: figure out how to sort when we dont know where the object is
                 $passes = collect($this->data('data'))->first(function ($item) use ($options) {
                     return ($item <=> $options[0]) == 0 || $item->is($options[0]);
                 });
@@ -116,13 +122,15 @@ abstract class TestCase extends BaseTestCase
                 Assert::assertNotNull($passes, $this->formatFailMessage($options[0], ':attribute not found in this component'));
                 
                 return $this;
-            } elseif (count($options) === 2) {
-                if(!isset ($this->data('data')[$options[0]])){
-                    Assert::fail('No prop data : "'. $options[0]. '" foound for this component!' );
+            } elseif (count($options) > 1) {
+                
+                if (!isset ($this->data('data')[$options[0]])) {
+                    Assert::fail('No prop data : "' . $options[0] . '" foound for this component!');
                 }
+                
                 $expected = $this->data('data')[$options[0]];
                 $given = $options[1];
-                
+                $sortBy = isset($options[2]) ? $options[2] : null;
                 // There is no method_exists that works on a macro,
                 // So make a try catch loop to check for assertions
                 // an equality functions
@@ -256,4 +264,5 @@ abstract class TestCase extends BaseTestCase
     {
         return $this->post(route('logout'));
     }
+    
 }

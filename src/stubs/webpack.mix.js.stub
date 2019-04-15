@@ -6,7 +6,15 @@ let postcssPresetEnv = require('postcss-preset-env')
 let selectors = require('postcss-custom-selectors')
 let colorMod = require('postcss-color-mod-function')
 
-mix.js('resources/js/app.js', 'public/js')
+function isInWatch(){
+    return process.argv.includes('--watch')
+}
+
+function isHot(){
+    return process.argv.includes('--hot')
+}
+
+        mix.js('resources/js/app.js', 'public/js')
     .postCss('resources/css/app.css', 'public/css', [
         postcssPresetEnv(),
         postcssNesting(),
@@ -15,5 +23,7 @@ mix.js('resources/js/app.js', 'public/js')
         tailwindcss('./resources/css/tailwind-config.js'),
     ])
     .purgeCss()
-    .version()
-    .browserSync('DummyDirectory.test')
+if(!isHot()){
+    mix.version()
+        .browserSync('DummyDirectory.test')
+}
