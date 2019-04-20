@@ -3,7 +3,6 @@
 namespace DummyNamespace;
 
 use App\User;
-use Carbon\Carbon;
 use Tests\DomainTestCase;
 use Illuminate\Foundation\Testing\TestResponse;
 
@@ -18,10 +17,10 @@ class DummyClass extends DomainTestCase
     /** @test */
     public function a_example_can_be_saved()
     {
-        $this->submitFieldsNoExceptions()
-        ->assertCreated();
+        $this->submitNoExceptions()
+            ->assertCreated();
 
-        $this->assertDatabaseHas('examples', $this->storedFields());
+        $this->assertDatabaseHas('examples', $this->checkParameters());
     }
 
     ////////////////////// INVALID TESTS //////////////////////
@@ -29,7 +28,7 @@ class DummyClass extends DomainTestCase
     /** @test */
     public function a_field_is_required()
     {
-        $this->submitFields(['field' => null])
+        $this->submit(['field' => null])
             ->assertSessionHasErrors('field');
     }
 
@@ -37,7 +36,7 @@ class DummyClass extends DomainTestCase
 
 
 
-    ////////////////////// TEST HELPERS //////////////////////
+    ////////////////////// GENERAL TEST HELPERS //////////////////////
 
     public function setUp(): void
     {
@@ -45,43 +44,62 @@ class DummyClass extends DomainTestCase
         $this->user = $this->basicSignIn(User::first());
     }
 
-    protected function submitFieldsNoExceptions($attributes = []): TestResponse
+    protected function submitNoExceptions($attributes = []): TestResponse
     {
         return $this
-            ->post(route(self::TEST_ROUTE, []), $this->getValidFields($attributes));
+            ->post(route(self::TEST_ROUTE, $this->routeParameters()), $this->submitParameters($attributes));
     }
 
-    protected function submitFields($attributes = []): TestResponse
+    protected function submit($attributes = []): TestResponse
     {
         return $this
             ->withExceptionHandling()
-            ->post(route(self::TEST_ROUTE, []), $this->getValidFields($attributes));
+            ->post(route(self::TEST_ROUTE, $this->routeParameters()), $this->submitParameters($attributes));
     }
 
-    private function storedFields($overwrite = [])
+    protected function checkParameters($overwrite = [])
     {
         $filteredKeys = [
-            'user_id' => $this->user->id,
-            'example_id' => $this->example->id,
-            'notes' => null,
+            'attempt_id' => $this->attempt->id,
+            'correct_answer' => true,
         ];
 
         return array_intersect_key($overwrite + $filteredKeys, $filteredKeys);
     }
 
-    protected function getValidFields($attributes = []): array
+    protected function submitParameters($attributes = []): array
     {
-        //MAYBE FIELDS THAT GET SAVED TO A SESSION
+        // Maybe fields that get saved to a session
+        // or are used on the form but never get saved
+
         $baseArray = [
-            'non_table_form_field' => true,
-            'another_non_table_form_field' => '123 Fake St',
+        // 'correct_answer' => null,
         ];
 
         return array_merge(
-            $this->storedFields(),
+            $this->checkParameters(),
             $baseArray,
             // $otherPossibleFieldSource, // or Example::getOptions(),
             $attributes
         );
     }
+
+    protected function routeParameters(): array
+    {
+        return [];
+        // return [
+        //     'example' => $this->example->id,
+        // ];
+    }
+
+    ////////////////////// PRIVATE HELPERS //////////////////////
+
+    //    protected function addCompletedTurns($n = 1)
+    //    {
+    //        create(Turn::class, [
+    //            'game_id' => $this->game->id,
+    //            'player_in_control_id' => $this->game->players->random(),
+    //            'complete' => true,
+    //        ],$n);
+    //    }
 }
