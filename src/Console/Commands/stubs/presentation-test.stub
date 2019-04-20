@@ -12,14 +12,14 @@ use Illuminate\Foundation\Testing\TestResponse;
 
 class DummyClass extends DomainTestCase
 {
-    const TEST_ROUTE = 'example.create';
+    const TEST_ROUTE = 'example.show';
 
     ////////////////////// SUPPLIED DATA TESTS //////////////////////
 
     /** @test */
     public function example_page_component_has_no_data_in_things_prop()
     {
-        $response = $this->getRoute();
+        $response = $this->getRouteNoExceptions();
         $response->assertPageComponentContains('things', []);
     }
 
@@ -61,8 +61,8 @@ class DummyClass extends DomainTestCase
 
 
 
-    
-    ////////////////////// TEST HELPERS //////////////////////
+
+    ////////////////////// GENERAL TEST HELPERS //////////////////////
 
     public function setUp(): void
     {
@@ -76,7 +76,7 @@ class DummyClass extends DomainTestCase
     {
         return $this
             ->withExceptionHandling()
-            ->get(route(self::TEST_ROUTE, $this->getValidFields($attributes)));
+            ->get(route(self::TEST_ROUTE, $this->routeVariables()), $this->getValidFields($attributes));
     }
     
     protected function getRouteTest($attributes = []): TestResponse
@@ -85,13 +85,13 @@ class DummyClass extends DomainTestCase
 
         return $this
             ->withExceptionHandling()
-            ->get(route(self::TEST_ROUTE, $this->getValidFields($attributes)));
+            ->get(route(self::TEST_ROUTE, $this->routeVariables()), $this->getValidFields($attributes));
     }
 
     protected function getRouteNoExceptions($attributes = []): TestResponse
     {
         return $this
-            ->get(route(self::TEST_ROUTE, $this->getValidFields($attributes)));
+            ->get(route(self::TEST_ROUTE, $this->routeVariables()), $this->getValidFields($attributes));
     }
     
     protected function getValidFields($attributes = []): array
@@ -104,4 +104,22 @@ class DummyClass extends DomainTestCase
             $attributes
         );
     }
+    protected function routeVariables(): array
+    {
+        return [];
+     //   return [
+     //       'game' => $this->game->id,
+     //   ];
+    }
+
+    ////////////////////// PRIVATE HELPERS //////////////////////
+
+    //    protected function addCompletedTurns($n = 1)
+    //    {
+    //        create(Turn::class, [
+    //            'game_id' => $this->game->id,
+    //            'player_in_control_id' => $this->game->players->random(),
+    //            'complete' => true,
+    //        ],$n);
+    //    }
 }

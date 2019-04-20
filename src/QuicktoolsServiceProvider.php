@@ -31,7 +31,12 @@ class QuicktoolsServiceProvider extends ServiceProvider {
         });
         
         Builder::macro('first', function($columns=['*']){
-            return $this->get($columns)->limit(1)->take(1)->firstOrFail();
+            return $this->take(1)->get($columns)->first();
+        });
+        
+        Builder::macro('last', function($columns=['*']){
+            return $this->orderBy($this->model->getQualifiedKeyName(), 'desc')
+                ->take(1)->get($columns)->first();
         });
         
         ViewFactory::macro('component', function ($name, $data = []) {
