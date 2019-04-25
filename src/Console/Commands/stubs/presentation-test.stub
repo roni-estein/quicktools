@@ -3,7 +3,7 @@
 namespace DummyNamespace;
 
 use App\User;
-use App\Thing;
+use App\Example;
 use Carbon\Carbon;
 use Tests\DomainTestCase;
 use Illuminate\Foundation\Testing\TestResponse;
@@ -12,54 +12,71 @@ use Illuminate\Foundation\Testing\TestResponse;
 
 class DummyClass extends DomainTestCase
 {
-    const TEST_ROUTE = 'example.show';
+    const TEST_ROUTE = 'example.dummy';
 
     ////////////////////// SUPPLIED DATA TESTS //////////////////////
 
     /** @test */
-    public function example_page_component_has_no_data_in_things_prop()
+    public function the_example_dummy_route_exists_and_returns_a_view()
     {
-        $response = $this->getRouteNoExceptions();
-        $response->assertPageComponentContains('things', []);
+        $this->getRouteNoExceptions()
+            ->assertOk()
+            ->assertViewIs('example.dummy');
     }
 
     /** @test */
-    public function example_page_component_contains_current_things()
+    public function a_example_appears_on_index_after_creation()
+    {
+        $this->followingRedirects()
+            ->submitNoExceptions()
+            ->assertOk()
+            ->assertViewIs('example.index')
+            ->assertSee(Example::last()->example_text);
+    }
+
+    /** @test */
+    public function example_page_component_has_no_data_in_examples_prop()
+    {
+        $response = $this->getRouteNoExceptions();
+        $response->assertPageComponentContains('examples', $this->example);
+    }
+
+    /** @test */
+    public function a_valid_example_is_present_in_request()
+    {
+        $response = $this->getRouteNoExceptions();
+        $this->assertTrue($response->data('example')->is($this->example));
+    }
+
+    /** @test */
+    public function example_page_component_contains_current_examples()
     {
         $response = $this->getRoute();
-        $response->assertPageComponentContains('things', Things::current());
+        $response->assertPageComponentContains('examples', Example::last());
     }
 
     ////////////////////// AXIOS TESTS //////////////////////
     
     /** @test */
-    public function an_axios_get_request_to_change_the_date_gets_new_things()
+    public function an_axios_get_request_to_change_the_date_gets_new_examples()
     {
-        $things = create(Thing::class, ['user_id' => auth()->id(), 'date' => Carbon::today()], 3);
-        $updatedThings = create(Slot::class, ['user_id' => auth()->id(), 'date' => Carbon::tomorrow()], 3);
+        $examples = create(Example::class, ['user_id' => auth()->id(), 'date' => Carbon::today()], 3);
+        $updatedExamples = create(Example::class, ['user_id' => auth()->id(), 'date' => Carbon::tomorrow()], 3);
         $this->getRoute()
-            ->assertPageComponentContains('initialThings', $things->sortBy('criteria'))
-            ->assertPageComponentDoesNotContain('initialThings', $updatedThings->sortBy('criteria'));
-    
-        
+            ->assertPageComponentContains('initialExamples', $examples->sortBy('criteria'))
+            ->assertPageComponentDoesNotContain('initialExamples', $updatedExamples->sortBy('criteria'));
         
         $apiData = $this->get(route('an.api.route',
             ['date'=> Carbon::tomorrow()])
         );
 
-        $apiData->original->assertEquals($updatedThings->sortBy('criteria'));
+        $apiData->original->assertEquals($updatedExamples->sortBy('criteria'));
     }
 
     ////////////////////// CONDITIONAL DATA TESTS //////////////////////
 
 
-
-
-
     ////////////////////// DATA ORDER TESTS //////////////////////
-
-
-
 
 
     ////////////////////// GENERAL TEST HELPERS //////////////////////
@@ -70,31 +87,32 @@ class DummyClass extends DomainTestCase
 
         // Require authenticated user for the following tests
         $this->user = $this->basicSignIn(User::first());
+        $this->example = create(Example::class);
     }
     
     protected function getRoute($attributes = []): TestResponse
     {
         return $this
             ->withExceptionHandling()
-            ->get(route(self::TEST_ROUTE, $this->routeVariables()), $this->getValidFields($attributes));
+            ->get(route(self::TEST_ROUTE, $this->routeParameters()), $this->queryStringFields($attributes));
     }
     
     protected function getRouteTest($attributes = []): TestResponse
     {
-        ddf($this->getValidFields($attributes));
+        ddf($this->queryStringFields($attributes));
 
         return $this
             ->withExceptionHandling()
-            ->get(route(self::TEST_ROUTE, $this->routeVariables()), $this->getValidFields($attributes));
+            ->get(route(self::TEST_ROUTE, $this->routeParameters()), $this->queryStringFields($attributes));
     }
 
     protected function getRouteNoExceptions($attributes = []): TestResponse
     {
         return $this
-            ->get(route(self::TEST_ROUTE, $this->routeVariables()), $this->getValidFields($attributes));
+            ->get(route(self::TEST_ROUTE, $this->routeParameters()), $this->queryStringFields($attributes));
     }
     
-    protected function getValidFields($attributes = []): array
+    protected function queryStringFields($attributes = []): array
     {
         $baseArray = [];
         
@@ -104,21 +122,23 @@ class DummyClass extends DomainTestCase
             $attributes
         );
     }
-    protected function routeVariables(): array
+    protected function routeParameters(): array
     {
         return [];
      //   return [
-     //       'game' => $this->game->id,
+     //       'example' => $this->example->id,
      //   ];
     }
 
     ////////////////////// PRIVATE HELPERS //////////////////////
 
+    //EXAMPLE
+    //
     //    protected function addCompletedTurns($n = 1)
     //    {
     //        create(Turn::class, [
     //            'game_id' => $this->game->id,
-    //            'player_in_control_id' => $this->game->players->random(),
+    //            'player_in_control_id' => $this->example->players->random(),
     //            'complete' => true,
     //        ],$n);
     //    }

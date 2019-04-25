@@ -2,7 +2,9 @@
 
 namespace Quicktools\Console\Commands;
 
+use Illuminate\Console\GeneratorCommand;
 use Illuminate\Foundation\Console\TestMakeCommand as ParentCommand;
+use Illuminate\Support\Str;
 
 class TestMakeCommand extends ParentCommand
 {
@@ -48,5 +50,40 @@ class TestMakeCommand extends ParentCommand
 
         return __DIR__.'/stubs/storage-test.stub';
     }
-
+    
+    /**
+     * Build the class with the given name.
+     *
+     * @param  string  $name
+     * @return string
+     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     */
+    protected function buildClass($name)
+    {
+        $stub = $this->files->get($this->getStub());
+    
+        return $this->replaceNamespace($stub, $name)
+            ->replaceDummyVariable($stub, $name)
+            ->replaceExampleVariable($stub, $name)
+            ->replaceClass($stub, $name);
+    }
+    
+    protected function replaceDummyVariable(&$stub, $name)
+    {
+        $class = Str::snake(str_replace($this->getNamespace($name).'\\', '', $name));
+        $class = str_replace('_test','',$class);
+        $stub =  str_replace('dummy', $class, $stub);
+        
+        return $this;
+    }
+    
+    protected function replaceExampleVariable(&$stub, $name)
+    {
+        $class = collect(explode('\\',$this->getNamespace($name)))->last();
+        $snake_class = Str::snake($class);
+        $stub =  str_replace('Example', $class, $stub);
+        $stub =  str_replace('example', $snake_class, $stub);
+        
+        return $this;
+    }
 }
