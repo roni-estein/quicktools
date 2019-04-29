@@ -23,6 +23,16 @@ class DummyClass extends DomainTestCase
         $this->assertDatabaseHas('examples', $this->checkParameters());
     }
 
+    /** @test */
+    public function a_example_appears_on_index_after_creation()
+    {
+        $this->followingRedirects()
+        ->submitNoExceptions()
+        ->assertOk()
+        ->assertViewIs('example.index')
+        ->assertSee(Example::last()->example_text);
+    }
+
     ////////////////////// INVALID TESTS //////////////////////
 
     /** @test */

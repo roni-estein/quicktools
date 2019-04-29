@@ -25,16 +25,6 @@ class DummyClass extends DomainTestCase
     }
 
     /** @test */
-    public function a_example_appears_on_index_after_creation()
-    {
-        $this->followingRedirects()
-            ->submitNoExceptions()
-            ->assertOk()
-            ->assertViewIs('example.index')
-            ->assertSee(Example::last()->example_text);
-    }
-
-    /** @test */
     public function example_page_component_has_no_data_in_examples_prop()
     {
         $response = $this->getRouteNoExceptions();

@@ -239,7 +239,6 @@ abstract class TestCase extends BaseTestCase
         
         // MODEL
         
-        
         Model::macro('tableHeaders', function () {
             return array_keys($this->attributes);
         });
