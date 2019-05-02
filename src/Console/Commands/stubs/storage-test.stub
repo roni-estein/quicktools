@@ -33,6 +33,23 @@ class DummyClass extends DomainTestCase
         ->assertSee(Example::last()->example_text);
     }
 
+//  /** @test */
+//    public function a_response_containing_the_note_is_sent_back_to_the_component()
+//    {
+//        $response = $this->submit()
+//            ->assertCreated();
+//
+//        $this->assertJsonSubset(Note::last()->toJson(),$response->json());
+//    }
+//
+//    /** @test */
+//    public function the_new_note_is_available_on_page_reload() {
+//        $this->submit();
+//        $this->get(route('client.show',$this->client))
+//            ->assertSee(Note::last()->body);
+//    }
+
+
     ////////////////////// INVALID TESTS //////////////////////
 
     /** @test */
@@ -51,7 +68,7 @@ class DummyClass extends DomainTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->user = $this->basicSignIn(User::first());
+        $this->basicSignIn($this->user = User::first());
     }
 
     protected function submitNoExceptions($attributes = []): TestResponse

@@ -76,7 +76,7 @@ class DummyClass extends DomainTestCase
         parent::setUp();
 
         // Require authenticated user for the following tests
-        $this->user = $this->basicSignIn(User::first());
+        $this->basicSignIn($this->user = User::first());
         $this->example = create(Example::class);
     }
     

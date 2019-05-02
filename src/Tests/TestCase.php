@@ -2,11 +2,12 @@
 
 namespace Quicktools\Tests;
 
-use mysql_xdevapi\Exception;
 use Quicktools\Model;
+use mysql_xdevapi\Exception;
 use PHPUnit\Framework\Assert;
-use Illuminate\Support\Collection as BaseCollection;
 use Illuminate\Foundation\Testing\TestResponse;
+use Illuminate\Foundation\Testing\Assert as PHPUnit;
+use Illuminate\Support\Collection as BaseCollection;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 
 abstract class TestCase extends BaseTestCase
@@ -23,6 +24,8 @@ abstract class TestCase extends BaseTestCase
         
         //HELPER
         
+        //JSON
+        
         
         //COLLECTIONS
         
@@ -34,9 +37,9 @@ abstract class TestCase extends BaseTestCase
                 return Assert::assertFalse($this->contains($items));
             } elseif (is_array($items)) {
                 return $this->assertDoesNotContain(collect($items));
-            } else {
-                return $this->assertDoesNotContain($items);
             }
+
+            return $this->assertDoesNotContain($items);
         });
         
         BaseCollection::macro('assertContains', function ($item, $orderedKey = null) {
@@ -47,20 +50,20 @@ abstract class TestCase extends BaseTestCase
         BaseCollection::macro('assertDoesNotContain', function ($items) {
             if (is_scalar($items)) {
                 return Assert::assertFalse($this->contains($items));
-            } else {
-                foreach ($items as $item) {
-                    Assert::assertFalse($this->contains($item));
-                }
+            }
+            foreach ($items as $item) {
+                Assert::assertFalse($this->contains($item));
             }
         });
         
         BaseCollection::macro('equals', function ($items, $orderedKey = null) {
-            if ($items->count() !== $this->count())
+            if ($items->count() !== $this->count()) {
                 return false;
+            }
             
             $self = $this;
             
-            if (!is_null($orderedKey)) {
+            if ( ! is_null($orderedKey)) {
                 $self = $this->sortBy($orderedKey);
                 $items = $items->sortBy($orderedKey);
             }
@@ -69,12 +72,12 @@ abstract class TestCase extends BaseTestCase
                 if (gettype($itemPair[0]) !== gettype($itemPair[1])) {
                     return false;
                 }
+
                 return (($itemPair[0] <=> $itemPair[1]) == 0);
             });
-            
         });
         
-        BaseCollection::macro('assertEquals', function ($items, $orderedKey = null){
+        BaseCollection::macro('assertEquals', function ($items, $orderedKey = null) {
             if (is_array($items)) {
                 $items = collect($items);
             }
@@ -83,12 +86,12 @@ abstract class TestCase extends BaseTestCase
             
             $self = $this;
             
-            if (!is_null($orderedKey)) {
+            if ( ! is_null($orderedKey)) {
                 $self = $this->sortBy($orderedKey);
                 $items = $items->sortBy($orderedKey);
             }
             
-            $self->zip($items)->each(function ($itemPair) use ($self, $items){
+            $self->zip($items)->each(function ($itemPair) use ($self, $items) {
                 if (gettype($itemPair[0]) !== gettype($itemPair[1])) {
                     Assert::fail(
                         $itemPair[0] . ' is a ' . gettype($itemPair[0]) . ' and ' .
@@ -96,10 +99,9 @@ abstract class TestCase extends BaseTestCase
                     );
                 }
     
-                if( is_a($itemPair[0], "Illuminate\Support\Collection") && is_a($itemPair[0],"Illuminate\Support\Collection")){
+                if (is_a($itemPair[0], "Illuminate\Support\Collection") && is_a($itemPair[0], "Illuminate\Support\Collection")) {
                     $itemPair[0]->assertEquals($itemPair[1]);
-                }
-                else{
+                } else {
                     Assert::assertTrue(
                         ($itemPair[0] <=> $itemPair[1]) == 0 || //primitives
                         $itemPair[0]->is($itemPair[1])   //laravel models and objects that inherit "is"
@@ -123,8 +125,7 @@ abstract class TestCase extends BaseTestCase
                 
                 return $this;
             } elseif (count($options) > 1) {
-                
-                if (!isset ($this->data('data')[$options[0]])) {
+                if ( ! isset($this->data('data')[$options[0]])) {
                     Assert::fail('No prop data : "' . $options[0] . '" foound for this component!');
                 }
                 
@@ -161,7 +162,6 @@ abstract class TestCase extends BaseTestCase
                 });
                 
                 Assert::assertNull($passes, $this->formatFailMessage($options[0], ':attribute is found in this component'));
-                
             } elseif (count($options) === 2) {
                 $expected = $this->data('data')[$options[0]];
                 $given = $options[1];
@@ -202,11 +202,11 @@ abstract class TestCase extends BaseTestCase
         
         
         TestResponse::macro('data', function ($key = null) {
-            if (!is_null($key)) {
+            if ( ! is_null($key)) {
                 return $this->original->getData()[$key];
             }
+
             return is_null($this->original->getData()) ? null : collect($this->original->getData());
-            
         });
         
         TestResponse::macro('assertViewContains', function ($key, $value) {
@@ -223,13 +223,13 @@ abstract class TestCase extends BaseTestCase
         
         
         TestResponse::macro('assertViewData', function ($callback) {
-            Assert::assertTrue($callback((object)$this->oiginal->getData()));
+            Assert::assertTrue($callback((object) $this->oiginal->getData()));
             
             return $this;
         });
         
         TestResponse::macro('formatFailMessage', function ($variable, $message) {
-            if (!is_array($variable)) {
+            if ( ! is_array($variable)) {
                 $str = str_replace(':attribute', get_class($variable), $message);
                 
                 return $str . "\nDetails - " . $variable;
@@ -258,10 +258,59 @@ abstract class TestCase extends BaseTestCase
         ddf(session()->get('errors')->getBag($errorBag));
     }
     
-    
     protected function logoutUser($guard = null)
     {
         return $this->post(route('logout'));
     }
     
+    public function decodeJson($data, $key = null)
+    {
+        $decodedJson = json_decode($data, true);
+
+//        if (is_null($decodedJson) || $decodedJson === false) {
+//            if ($this->exception) {
+//                throw $this->exception;
+//            } else {
+//                PHPUnit::fail('Invalid JSON was returned from the route.');
+//            }
+//        }
+        
+        return data_get($decodedJson, $key);
+    }
+    
+    public function assertJsonMessage(array $expected, array $actual)
+    {
+        $expected = json_encode($expected, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+        
+        $actual = json_encode($actual, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+        
+        return 'Unable to find JSON: '.PHP_EOL.PHP_EOL.
+            "[{$expected}]".PHP_EOL.PHP_EOL.
+            'within response JSON:'.PHP_EOL.PHP_EOL.
+            "[{$actual}].".PHP_EOL.PHP_EOL;
+    }
+    
+    public function assertJsonSubset($expected, $actual, $strict = false)
+    {
+        
+        if ( ! is_array($expected)) {
+            $expected = $this->decodeJson($expected);
+        }
+        if(count($expected) === 0){
+            ddf('Failure: $expected dataset cannot be empty', 2);
+        }
+        
+        if ( ! is_array($actual)) {
+            $actual = $this->decodeJson($actual);
+        }
+    
+        if(count($expected) === 0){
+            $this->fail('$actual dataset was empty');
+        }
+        
+        PHPUnit::assertArraySubset($expected,
+            $actual, $strict, $this->assertJsonMessage($expected, $actual));
+    
+        return $this;
+    }
 }
