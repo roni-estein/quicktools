@@ -68,7 +68,7 @@ class DummyClass extends DomainTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->basicSignIn($this->user = User::first());
+        $this->user = $this->signedInUser(User::first());
     }
 
     protected function submitNoExceptions($attributes = []): TestResponse

@@ -2,6 +2,7 @@
 
 namespace Quicktools\Tests;
 
+use App\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -103,5 +104,21 @@ abstract class DBTestCase extends TestCase
     public function assertDatabaseMissingObject($object)
     {
         return $this->assertDatabaseMissing($object->getTable(), ['id' => $object->id]);
+    }
+    
+    protected function basicSignIn($user = null){
+        $user = $user ?: create(User::class);
+        
+        $this->be($user);
+        
+        return $this;
+    }
+    
+    protected function signedInUser($user = null)
+    {
+        $user = $user ?: create(User::class);
+        $this->be($user);
+        
+        return $user;
     }
 }
