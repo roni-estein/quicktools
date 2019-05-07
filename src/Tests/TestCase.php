@@ -3,12 +3,12 @@
 namespace Quicktools\Tests;
 
 use Quicktools\Model;
-use mysql_xdevapi\Exception;
 use PHPUnit\Framework\Assert;
 use Illuminate\Foundation\Testing\TestResponse;
 use Illuminate\Foundation\Testing\Assert as PHPUnit;
 use Illuminate\Support\Collection as BaseCollection;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
+use Symfony\Component\Console\Output\ConsoleOutput;
 
 abstract class TestCase extends BaseTestCase
 {
@@ -17,6 +17,13 @@ abstract class TestCase extends BaseTestCase
     // Determine in a view has been loaded or if a view is missing
     // This will even drill down to view partials
     use Viewable;
+    public $output;
+    
+    public function __construct($name = null, array $data = [], $dataName = '')
+    {
+        parent::__construct($name, $data, $dataName);
+        $this->output = new ConsoleOutput();
+    }
     
     public function setUp(): void
     {
@@ -113,6 +120,14 @@ abstract class TestCase extends BaseTestCase
         
         
         // VUE PAGE COMPONENTS
+        
+        TestResponse::macro('assertComponentIs', function($name){
+            $this->ensureResponseHasView();
+            
+            PHPUnit::assertEquals($name, $this->data('name'));
+            
+            return $this;
+        });
         
         TestResponse::macro('assertPageComponentContains', function (...$options) {
             if (count($options) === 1 || count($options) === 2 && gettype($options[1]) == 'string') {
@@ -255,7 +270,13 @@ abstract class TestCase extends BaseTestCase
     
     protected function errorsArray($errorBag = 'default')
     {
-        ddf(session()->get('errors')->getBag($errorBag));
+        if(! is_null(session()->get('errors'))){
+    
+            ddf(session()->get('errors')->getBag($errorBag),2,1);
+        }else{
+            $this->output->writeln('There were no validation errors');
+            return ;
+        }
     }
     
     protected function logoutUser($guard = null)

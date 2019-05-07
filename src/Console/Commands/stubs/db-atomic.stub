@@ -5,9 +5,9 @@ use Illuminate\Database\Seeder;
 class DummyModel extends Seeder
 {
     /**
-     * Run the database seeds.
+     * An  database scene that can be used to act out a certain sccenario
      */
-    public function run()
+    public function run($attributes = [])
     {
         // return $user = create(User::class);
     }

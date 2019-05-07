@@ -5,9 +5,9 @@ use Illuminate\Database\Seeder;
 class DummyModel extends Seeder
 {
     /**
-     * Run the database seeds.
+     * An database atomic action that creates or modifies one item and returns the modification
      */
-    public function run()
+    public function run($attributes = [])
     {
         // return $user = create(User::class);
     }

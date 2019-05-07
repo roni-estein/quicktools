@@ -22,6 +22,8 @@ class QuicktoolsServiceProvider extends ServiceProvider {
                 \Quicktools\Console\Commands\ModelMakeCommand::class,
                 \Quicktools\Console\Commands\TestMakeCommand::class,
                 \Quicktools\Console\Commands\MakeFormRequestCommand::class,
+                \Quicktools\Console\Commands\MakeDatabaseScene::class,
+                \Quicktools\Console\Commands\MakeDatabaseAtomic::class,
             ]);
 
         }
